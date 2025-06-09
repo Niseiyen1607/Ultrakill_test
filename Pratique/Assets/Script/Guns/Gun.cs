@@ -8,6 +8,7 @@ public class Gun : MonoBehaviour
     public GameObject hitScanPrefab;
     public GameObject projectilePrefab;
     public Transform firePoint; // Point from where the bullet is fired
+    public Animator Animator; 
     public LayerMask layerMask;
 
     [Header("Type")]
@@ -326,5 +327,13 @@ public class Gun : MonoBehaviour
 
         trail.transform.position = hit;
         Destroy(trail.gameObject, trail.time);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, ricochetRange);
     }
 }
