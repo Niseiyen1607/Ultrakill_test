@@ -48,4 +48,12 @@ public class PlayerCam : MonoBehaviour
     {
         transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
     }
+
+    /// <summary>
+    /// Triggers a camera shake effect using DoTween.
+    /// </summary>
+    public void DoCameraShake(float duration, float strength, int vibrato, float randomness)
+    {
+        transform.DOShakePosition(duration, strength, vibrato, randomness);
+    }
 }

@@ -7,7 +7,7 @@ public class Gun : MonoBehaviour
     [Header("Reference")]
     public GameObject hitScanPrefab;
     public GameObject projectilePrefab;
-    public Transform firePoint; // Point from where the bullet is fired
+    public Transform firePoint;
     public Animator Animator;
     public GameObject shootParticule;
     public GameObject normalHitParticule;
@@ -93,6 +93,10 @@ public class Gun : MonoBehaviour
         Animator.SetTrigger("Shoot");
         Instantiate(shootParticule, firePoint.position, firePoint.rotation);
 
+        bool doublePlayerKnockback = false;
+
+        Vector3 shootDirectionForPlayerKnockback = Vector3.zero;
+
         for (int i = 0; i < multishot; i++)
         {
             Vector3 shootDirection = ApplySpread();
@@ -100,6 +104,11 @@ public class Gun : MonoBehaviour
             if (!projectile)
             {
                 Ray ray = new Ray(Camera.main.transform.position, shootDirection);
+
+                if (i == 0)
+                {
+                    shootDirectionForPlayerKnockback = shootDirection;
+                }
 
                 RaycastHit[] hits = Physics.RaycastAll(ray, 100f, layerMask);
                 System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
@@ -151,6 +160,14 @@ public class Gun : MonoBehaviour
                         rb.AddForce(knockbackDirection * knockback, ForceMode.Impulse);
                     }
 
+                    // Player knockback plaque
+                    if (hitObject.CompareTag("SpecialKnockbackPlate")) 
+                    {
+                        Debug.Log("Hit Special Knockback Plate! Player knockback will be doubled.");
+                        doublePlayerKnockback = true;
+                    }
+
+                    // Si le projectile est collant, le détruire pas
                     if (ExploadOnDestroy)
                     {
                         Explode(hit.point);
@@ -175,16 +192,8 @@ public class Gun : MonoBehaviour
                     StartCoroutine(SpawnTrail(trailRenderer, firePoint.position, endPoint, null, Vector3.zero));
                 }
             }
-            else
-            {
-                GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
-                Rigidbody rb = proj.GetComponent<Rigidbody>();
-                if (rb)
-                    rb.velocity = shootDirection * projectileSpeed;
-            }
         }
 
-        // Player knockback
         if (playerKnockback != 0)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -193,8 +202,15 @@ public class Gun : MonoBehaviour
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 if (playerRb)
                 {
-                    Vector3 knockbackDirection = (player.transform.position - firePoint.position).normalized;
-                    Vector3 rocketJumpForce = knockbackDirection * playerKnockback + Vector3.up * playerKnockback * 0.7f;
+                    float finalPlayerKnockback = playerKnockback;
+                    if (doublePlayerKnockback)
+                    {
+                        finalPlayerKnockback *= 2; 
+                    }
+
+                    Vector3 knockbackDirectionOpposite = -shootDirectionForPlayerKnockback.normalized;
+
+                    Vector3 rocketJumpForce = knockbackDirectionOpposite * finalPlayerKnockback + Vector3.up * finalPlayerKnockback * 0.7f;
                     playerRb.AddForce(rocketJumpForce, ForceMode.Impulse);
                 }
             }
