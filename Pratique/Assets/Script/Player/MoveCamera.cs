@@ -5,8 +5,8 @@ using UnityEngine;
 public class MoveCamera : MonoBehaviour
 {
     [SerializeField] Transform cameraPosition;
+    [SerializeField] PlayerCam playerCam;
 
-    // Update is called once per frame
     void Update()
     {
         transform.position = cameraPosition.position;

@@ -59,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
+    private PlayerCam PlayerCam;
 
     public MovementState state;
     private MovementState lasteState;
@@ -82,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        PlayerCam = FindObjectOfType<PlayerCam>();
         rb.freezeRotation = true;
 
         readyToJump = true;

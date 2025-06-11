@@ -8,7 +8,9 @@ public class Gun : MonoBehaviour
     public GameObject hitScanPrefab;
     public GameObject projectilePrefab;
     public Transform firePoint; // Point from where the bullet is fired
-    public Animator Animator; 
+    public Animator Animator;
+    public GameObject shootParticule;
+    public GameObject normalHitParticule;
     public LayerMask layerMask;
 
     [Header("Type")]
@@ -35,6 +37,7 @@ public class Gun : MonoBehaviour
     public int ricochetCount; // How many times the bullet can ricochet before being destroyed
     public float richochetMultiplier = 1f; // The damage multiplier for each ricochet
     public float ricochetRange = 20f; // The range at which the bullet can ricochet to another target
+    public float ricochetSpeed; // The speed at which the bullet travels after a ricochet
     public int pierceCount; // How many targets the bullet can pierce before being destroyed
 
     [Header("Projectile Propreties")]
@@ -70,6 +73,7 @@ public class Gun : MonoBehaviour
     private void Awake()
     {
         currentAmmo = Ammo;
+        finalDamage = damage;
     }
 
     public void TryShoot()
@@ -80,13 +84,14 @@ public class Gun : MonoBehaviour
         }
     }
 
-    // ... (toutes les variables restent inchangées)
-
     private void Shoot()
     {
         Debug.Log("Gun Shoot");
         currentAmmo--;
         StartCoroutine(AttackCooldown());
+
+        Animator.SetTrigger("Shoot");
+        Instantiate(shootParticule, firePoint.position, firePoint.rotation);
 
         for (int i = 0; i < multishot; i++)
         {
@@ -102,6 +107,9 @@ public class Gun : MonoBehaviour
                 int pierceRemaining = pierceCount + 1;
                 List<GameObject> alreadyHit = new List<GameObject>();
 
+                RaycastHit firstHit = default;
+                bool hasFirstHit = false;
+
                 foreach (RaycastHit hit in hits)
                 {
                     if (pierceRemaining <= 0)
@@ -113,6 +121,12 @@ public class Gun : MonoBehaviour
 
                     alreadyHit.Add(hitObject);
 
+                    if (!hasFirstHit)
+                    {
+                        firstHit = hit;
+                        hasFirstHit = true;
+                    }
+
                     Debug.Log($"Hit {hitObject.name}");
                     Debug.DrawLine(ray.origin, hit.point, Color.red, 2f);
 
@@ -121,11 +135,13 @@ public class Gun : MonoBehaviour
                         Instantiate(hitScanPrefab, hit.point, Quaternion.LookRotation(hit.normal));
                         GameObject trail = Instantiate(hitScanPrefab);
                         TrailRenderer trailRenderer = trail.GetComponent<TrailRenderer>();
-                        StartCoroutine(SpawnTrail(trailRenderer, firePoint.position, hit.point));
+                        StartCoroutine(SpawnTrail(trailRenderer, firePoint.position, hit.point, hitObject, hit.normal));
                     }
 
                     float distance = Vector3.Distance(firePoint.position, hit.point);
                     finalDamage = Mathf.Lerp(damage, minDamage, Mathf.Clamp01(distance / damageFalloff));
+
+                    ApplyDamage(hit.collider, finalDamage, hit.point, ray.direction);
 
                     // Knockback
                     Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
@@ -143,7 +159,8 @@ public class Gun : MonoBehaviour
                     // Ricochet sur la première cible seulement
                     if (ricochetOnHit && ricochetCount > 0 && pierceRemaining == pierceCount + 1)
                     {
-                        StartCoroutine(Ricochet(hit.point, new List<GameObject>(alreadyHit), ricochetCount));
+                        List<GameObject> ricochetExcludeList = new List<GameObject>(alreadyHit);
+                        StartCoroutine(Ricochet(firstHit.point, ricochetExcludeList, ricochetCount));
                     }
 
                     pierceRemaining--;
@@ -155,7 +172,7 @@ public class Gun : MonoBehaviour
                     Vector3 endPoint = ray.origin + ray.direction * 100f;
                     GameObject trail = Instantiate(hitScanPrefab);
                     TrailRenderer trailRenderer = trail.GetComponent<TrailRenderer>();
-                    StartCoroutine(SpawnTrail(trailRenderer, firePoint.position, endPoint));
+                    StartCoroutine(SpawnTrail(trailRenderer, firePoint.position, endPoint, null, Vector3.zero));
                 }
             }
             else
@@ -188,6 +205,7 @@ public class Gun : MonoBehaviour
     {
         if (!reloading && currentAmmo < Ammo)
         {
+            Animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
     }
@@ -199,18 +217,12 @@ public class Gun : MonoBehaviour
 
         foreach (Collider nearbyObject in colliders)
         {
-            /* 
-            Health targetHealth = nearbyObject.GetComponent<Health>();
-            if (targetHealth != null)
-            {
-                // Calcule la distance pour diminuer les dégâts à la périphérie
-                float distance = Vector3.Distance(position, nearbyObject.transform.position);
-                float damageRatio = Mathf.Clamp01(1 - (distance / explosionRadius));
-                float damageToApply = explosionDamage * damageRatio;
+            float distance = Vector3.Distance(position, nearbyObject.transform.position);
+            float damageRatio = Mathf.Clamp01(1 - (distance / explosionRadius));
+            float damageToApply = explosionDamage * damageRatio;
 
-                targetHealth.TakeDamage(damageToApply);
-            }
-            */
+            ApplyDamage(nearbyObject, damageToApply, nearbyObject.transform.position,
+                        (nearbyObject.transform.position - position).normalized);
 
             // Appliquer knockback si possible
             Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
@@ -245,41 +257,59 @@ public class Gun : MonoBehaviour
         return closest;
     }
 
-    private IEnumerator Ricochet(Vector3 fromPosition, List<GameObject> alreadyHit, int remainingRicochets)
+    private IEnumerator Ricochet(Vector3 fromPosition, List<GameObject> alreadyHitByRicochet, int remainingRicochets)
     {
-        yield return new WaitForSeconds(attackSpeed);
+        if (remainingRicochets <= 0)
+        {
+            Debug.Log("Ricochet count exhausted.");
+            yield break; 
+        }
 
-        GameObject nearest = FindNearestEnemy(fromPosition, alreadyHit);
+        yield return new WaitForSeconds(ricochetSpeed); 
+
+        GameObject nearest = FindNearestEnemy(fromPosition, alreadyHitByRicochet);
+
         if (nearest == null)
         {
-            // Aucun ennemi proche, pas de ricochet du tout
+            Debug.Log("No new enemy found to ricochet to. Ricochet chain ends.");
             yield break;
         }
 
         Vector3 dir = (nearest.transform.position - fromPosition).normalized;
         Ray ricochetRay = new Ray(fromPosition, dir);
 
-        if (Physics.Raycast(ricochetRay, out RaycastHit hit, 100f, layerMask))
+        RaycastHit hit;
+        if (Physics.Raycast(ricochetRay, out hit, ricochetRange, layerMask))
         {
-            Debug.DrawLine(fromPosition, hit.point, Color.yellow, 1f);
+            Debug.DrawLine(fromPosition, hit.point, Color.yellow, 1f); // Visual for ricochet path
 
             if (hitScanPrefab)
             {
                 GameObject trail = Instantiate(hitScanPrefab);
                 TrailRenderer trailRenderer = trail.GetComponent<TrailRenderer>();
-                StartCoroutine(SpawnTrail(trailRenderer, fromPosition, hit.point));
-                Instantiate(hitScanPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                StartCoroutine(SpawnTrail(trailRenderer, fromPosition, hit.point, hit.collider.gameObject, hit.normal));
+                Instantiate(hitScanPrefab, hit.point, Quaternion.LookRotation(hit.normal)); // Impact particle at new hit point
             }
+
+            ApplyDamage(hit.collider, finalDamage * richochetMultiplier, hit.point, dir);
 
             Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
             if (rb)
                 rb.AddForce(dir * knockback, ForceMode.Impulse);
 
-            alreadyHit.Add(hit.collider.gameObject);
+            alreadyHitByRicochet.Add(hit.collider.gameObject);
 
-            if (remainingRicochets > 1)
+            StartCoroutine(Ricochet(hit.point, alreadyHitByRicochet, remainingRicochets - 1));
+        }
+        else
+        {
+            Debug.Log("Ricochet raycast failed to hit a valid target within range. Ricochet chain ends.");
+            if (hitScanPrefab) 
             {
-                StartCoroutine(Ricochet(hit.point, alreadyHit, remainingRicochets - 1));
+                Vector3 endPoint = fromPosition + dir * ricochetRange;
+                GameObject trail = Instantiate(hitScanPrefab);
+                TrailRenderer trailRenderer = trail.GetComponent<TrailRenderer>();
+                StartCoroutine(SpawnTrail(trailRenderer, fromPosition, endPoint, null, Vector3.zero));
             }
         }
     }
@@ -314,7 +344,7 @@ public class Gun : MonoBehaviour
         attackCooldown = false;
     }
 
-    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 start, Vector3 hit)
+    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 start, Vector3 hit, GameObject hitObject, Vector3 hitNormal)
     {
         float time = 0f;
 
@@ -327,6 +357,18 @@ public class Gun : MonoBehaviour
 
         trail.transform.position = hit;
         Destroy(trail.gameObject, trail.time);
+
+        if (hitObject != null) 
+        {
+            Instantiate(normalHitParticule, hit, Quaternion.LookRotation(hitNormal));
+        }
+    }
+
+    private void ApplyDamage(Collider col, float amount, Vector3 hitPoint, Vector3 hitDir)
+    {
+        IDamageable dmg = col.GetComponent<IDamageable>() ?? col.GetComponentInParent<IDamageable>();
+        if (dmg != null)
+            dmg.TakeDamage(amount, hitPoint, hitDir);
     }
 
     private void OnDrawGizmosSelected()

@@ -13,7 +13,6 @@ public class Projectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        // Donne une vitesse initiale vers l'avant
         if (!isParried)
             rb.velocity = transform.forward * speed;
     }
@@ -24,14 +23,23 @@ public class Projectile : MonoBehaviour
 
         isParried = true;
         rb.velocity = direction.normalized * speed * forceMultiplier;
-        damage *= 2f; // double les dégâts après parry
-        gameObject.tag = "PlayerProjectile"; // change la cible
-        GetComponent<Renderer>().material.color = Color.cyan; // change couleur pour voir que c'est parried
+        damage *= 2f; 
+        gameObject.tag = "PlayerProjectile"; 
+        GetComponent<Renderer>().material.color = Color.cyan;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Optionnel : détecte si ça touche un ennemi ou autre ici
+        if (isParried)
+        {
+            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                Vector3 hitPoint = collision.contacts[0].point;
+                Vector3 hitDirection = -rb.velocity.normalized;
+                damageable.TakeDamage(damage, hitPoint, hitDirection);
+            }
+        }
 
         Destroy(gameObject);
     }

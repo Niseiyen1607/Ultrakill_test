@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
+    [SerializeField] private PlayerMovement playerMovement;
+
     public float sensX;
     public float sensY;
 
@@ -19,6 +21,7 @@ public class PlayerCam : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
 
     private void Update()
     {

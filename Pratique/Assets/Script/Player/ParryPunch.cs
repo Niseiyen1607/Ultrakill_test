@@ -4,6 +4,8 @@ using DG.Tweening; // N'oublie pas d'ajouter ça !
 
 public class ParryPunch : MonoBehaviour
 {
+    [SerializeField] private GameObject flashParticule;
+
     public float punchRange = 3f;
     public float punchRadius = 1.5f;
     public LayerMask projectileMask;
@@ -33,7 +35,7 @@ public class ParryPunch : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) // touche de parry
+        if (Input.GetKeyDown(KeyCode.F)) 
         {
             TryParry();
         }
@@ -54,6 +56,10 @@ public class ParryPunch : MonoBehaviour
             if (proj && proj.canBeParried)
             {
                 proj.Parry(Camera.main.transform.forward, 1.5f);
+
+                if (flashParticule != null)
+                    Instantiate(flashParticule, proj.transform.position, Quaternion.identity);
+
                 parryDone = true;
                 Debug.Log("Projectile parried!");
             }
