@@ -10,7 +10,6 @@ public class GunManager : MonoBehaviour
     {
         if (currentGun == null) return;
 
-        // Tir principal (clic gauche)
         if (currentGun.Automatic)
         {
             if (Input.GetMouseButton(0))
@@ -27,7 +26,6 @@ public class GunManager : MonoBehaviour
             }
         }
 
-        // Reload
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Reloading gun");
