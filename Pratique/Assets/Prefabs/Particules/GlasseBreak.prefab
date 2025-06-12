@@ -670,7 +670,7 @@ ParticleSystem:
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: -7, y: 2.0000005, z: -6}
+    m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: -0, y: 0, z: 0}
     m_Scale: {x: 9.188377, y: 4.984371, z: 1}
     placementMode: 0

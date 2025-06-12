@@ -68,12 +68,14 @@ public class Gun : MonoBehaviour
     public float currentMultiShot;
 
     private float finalDamage; // Final damage after falloff
+    private float finalPlayerKnockback;
 
 
     private void Awake()
     {
         currentAmmo = Ammo;
         finalDamage = damage;
+        finalPlayerKnockback = playerKnockback;
     }
 
     public void TryShoot()
@@ -92,8 +94,6 @@ public class Gun : MonoBehaviour
 
         Animator.SetTrigger("Shoot");
         Instantiate(shootParticule, firePoint.position, firePoint.rotation);
-
-        bool doublePlayerKnockback = false;
 
         Vector3 shootDirectionForPlayerKnockback = Vector3.zero;
 
@@ -161,10 +161,10 @@ public class Gun : MonoBehaviour
                     }
 
                     // Player knockback plaque
-                    if (hitObject.CompareTag("SpecialKnockbackPlate")) 
+                    if (hitObject.GetComponent<PropulsionPlate>()) 
                     {
-                        Debug.Log("Hit Special Knockback Plate! Player knockback will be doubled.");
-                        doublePlayerKnockback = true;
+                        playerKnockback =+ hitObject.GetComponent<PropulsionPlate>().GetForce();
+                        finalPlayerKnockback = playerKnockback;
                     }
 
                     // Si le projectile est collant, le détruire pas
@@ -202,12 +202,6 @@ public class Gun : MonoBehaviour
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 if (playerRb)
                 {
-                    float finalPlayerKnockback = playerKnockback;
-                    if (doublePlayerKnockback)
-                    {
-                        finalPlayerKnockback *= 2; 
-                    }
-
                     Vector3 knockbackDirectionOpposite = -shootDirectionForPlayerKnockback.normalized;
 
                     Vector3 rocketJumpForce = knockbackDirectionOpposite * finalPlayerKnockback + Vector3.up * finalPlayerKnockback * 0.7f;
