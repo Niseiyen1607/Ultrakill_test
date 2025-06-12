@@ -56,6 +56,7 @@ public class Dashing : MonoBehaviour
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
 
+        cam.DoCameraShake(0.2f, 0.4f, 20, 90);
         cam.DoFov(dashFov);
 
         Transform forwardT;

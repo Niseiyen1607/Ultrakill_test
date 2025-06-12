@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class ActivateItem : MonoBehaviour
 {
-    [SerializeField] private GameObject itemToActivate;
-    [SerializeField] bool weaponToActivate = false;
+    public enum ItemType
+    {
+        Revolver,
+        Katana,
+        Shotgun
+    }
+
+    [Header("Item Type")]
+    public ItemType itemType;
 
     private GunManager gunManager;
 
-    // Paramètres de l’oscillation
     [Header("Oscillation Settings")]
     public float floatAmplitude = 0.25f;
     public float floatFrequency = 1f;
@@ -21,44 +27,44 @@ public class ActivateItem : MonoBehaviour
     private void Start()
     {
         gunManager = FindObjectOfType<GunManager>();
-        if (itemToActivate != null)
-        {
-            startPos = transform.position;
-        }
+        startPos = transform.position;
     }
 
     private void Update()
     {
-        if (!isActivated && itemToActivate != null)
+        if (!isActivated)
         {
-            // Mouvement de haut en bas (sinus)
+            // Oscillation verticale
             Vector3 pos = startPos;
             pos.y += Mathf.Sin(Time.time * floatFrequency) * floatAmplitude;
             transform.position = pos;
 
-            // Rotation lente autour de l’axe Y
+            // Rotation sur Y
             transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isActivated)
+        if (isActivated) return;
+
+        if (other.CompareTag("Player"))
         {
-            if (itemToActivate != null)
+            switch (itemType)
             {
-                itemToActivate.SetActive(true);
-                gunManager.currentGun = itemToActivate.GetComponent<Gun>();
-
-                isActivated = true;
-
-                Debug.Log("Item activated: " + itemToActivate.name);
-                Destroy(gameObject); 
+                case ItemType.Revolver:
+                    gunManager.ActivateRevolver();
+                    break;
+                case ItemType.Katana:
+                    gunManager.ActivateKatana();
+                    break;
+                case ItemType.Shotgun:
+                    gunManager.ActivateShotgun();
+                    break;
             }
-            else
-            {
-                Debug.LogWarning("No item assigned to activate.");
-            }
+
+            isActivated = true;
+            Destroy(gameObject);
         }
     }
 }

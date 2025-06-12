@@ -167,6 +167,8 @@ public class PlayerMovement : MonoBehaviour
 
             else
                 desiredMoveSpeed = sprintSpeed;
+
+            PlayerCam.DoFov(95f);
         }
 
         // Mode - Crouching
@@ -181,6 +183,8 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sprinting;
             desiredMoveSpeed = sprintSpeed;
+
+            PlayerCam.DoFov(75f);
         }
 
         // Mode - Walking
@@ -188,6 +192,8 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
+
+            PlayerCam.DoFov(60f);
         }
 
         // Mode - Air

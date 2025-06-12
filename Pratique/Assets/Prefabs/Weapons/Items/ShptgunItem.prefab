@@ -130,6 +130,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8172776968157312446}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e56aca2c18083b044b071c5617317af8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4686463980082096337}
   m_SourcePrefab: {fileID: 100100000, guid: e56aca2c18083b044b071c5617317af8, type: 3}
 --- !u!4 &5074336845427247675 stripped
 Transform:
@@ -155,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19390f347c0015d4fa465e02eb75de42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToActivate: {fileID: 0}
-  floatHeight: 0.5
-  floatDuration: 1.5
+  itemType: 2
+  floatAmplitude: 0.25
+  floatFrequency: 1
   rotationSpeed: 45
 --- !u!65 &8172776968157312446
 BoxCollider:
@@ -180,3 +184,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7925556, y: 0.9502994, z: 0.5927048}
   m_Center: {x: 0.042676587, y: 0.26872993, z: 0.0066473656}
+--- !u!54 &4686463980082096337
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5557576996712501377}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 118
+  m_CollisionDetection: 0
