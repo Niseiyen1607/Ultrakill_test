@@ -163,7 +163,7 @@ public class Gun : MonoBehaviour
                     // Player knockback plaque
                     if (hitObject.GetComponent<PropulsionPlate>()) 
                     {
-                        playerKnockback =+ hitObject.GetComponent<PropulsionPlate>().GetForce();
+                        playerKnockback += hitObject.GetComponent<PropulsionPlate>().GetForce();
                         finalPlayerKnockback = playerKnockback;
                     }
 

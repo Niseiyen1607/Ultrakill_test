@@ -112,7 +112,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e56aca2c18083b044b071c5617317af8,
         type: 3}
       propertyPath: m_Name
-      value: ShptgunItem
+      value: ShotgunItem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

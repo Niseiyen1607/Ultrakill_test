@@ -76,4 +76,64 @@ public class GunManager : MonoBehaviour
             Debug.LogWarning("Revolver GameObject is not assigned.");
         }
     }
+
+    public void DeactivateAllGuns()
+    {
+        if (shotgun != null) shotgun.SetActive(false);
+        if (revolver != null) revolver.SetActive(false);
+        if (katana != null) katana.SetActive(false);
+        currentGun = null;
+        Debug.Log("All guns deactivated");
+    }
+
+    public void DeactivateShotgun()
+    {
+        if (shotgun != null)
+        {
+            shotgun.SetActive(false);
+            if (currentGun == shotgun.GetComponent<Gun>())
+            {
+                currentGun = null;
+            }
+            Debug.Log("Shotgun deactivated");
+        }
+        else
+        {
+            Debug.LogWarning("Shotgun GameObject is not assigned.");
+        }
+    }
+
+    public void DeactivateRevolver()
+    {
+        if (revolver != null)
+        {
+            revolver.SetActive(false);
+            if (currentGun == revolver.GetComponent<Gun>())
+            {
+                currentGun = null;
+            }
+            Debug.Log("Revolver deactivated");
+        }
+        else
+        {
+            Debug.LogWarning("Revolver GameObject is not assigned.");
+        }
+    }
+
+    public void DeactivateKatana()
+    {
+        if (katana != null)
+        {
+            katana.SetActive(false);
+            if (currentGun == katana.GetComponent<Gun>())
+            {
+                currentGun = null;
+            }
+            Debug.Log("Katana deactivated");
+        }
+        else
+        {
+            Debug.LogWarning("Katana GameObject is not assigned.");
+        }
+    }
 }

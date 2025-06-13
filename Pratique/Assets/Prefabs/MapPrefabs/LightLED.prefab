@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2581680986206465070}
   - component: {fileID: 7322262957254326142}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: LightLED
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

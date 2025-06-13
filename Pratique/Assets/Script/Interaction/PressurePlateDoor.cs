@@ -1,67 +1,76 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class PressurePlateDoor : MonoBehaviour
+public class PressurePlate : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private Transform door;
-    [SerializeField] private Vector3 openPositionOffset;
-    [SerializeField] private float doorOpenDuration = 1f;
-    [SerializeField] private string triggeringTag = "Player";
+    [Header("Settings")]
+    public Transform plateVisual; // Visuel qui descend
+    public Vector3 pressedOffset = new Vector3(0, -0.1f, 0);
+    public float pressSpeed = 5f;
+    public LayerMask detectionLayer;
 
-    [Header("Pressure Plate Animation")]
-    [SerializeField] private float plateDepressDistance = 0.1f;  // À quel point la plaque descend
-    [SerializeField] private float plateDepressDuration = 0.2f;  // Vitesse d'animation
+    [Header("Door")]
+    public Transform doorTransform; // Transform au lieu de GameObject
+    public Vector3 doorOpenOffset = new Vector3(0, 3f, 0); // Déplacement vers le haut
+    public float doorMoveDuration = 0.75f;
+    public Ease doorEase = Ease.OutCubic;
 
-    private Vector3 doorClosedPos;
-    private Vector3 plateStartPos;
-    private bool isOpen = false;
+    public bool stayOpenWhilePressed = true;
+
+    private Vector3 plateInitialPos;
+    private Vector3 doorInitialPos;
+    private int objectsOnPlate = 0;
 
     private void Start()
     {
-        if (door != null)
-            doorClosedPos = door.position;
-
-        plateStartPos = transform.position; // position initiale de la plaque
+        plateInitialPos = plateVisual.localPosition;
+        if (doorTransform != null)
+            doorInitialPos = doorTransform.position;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(triggeringTag) && !isOpen)
+        if (((1 << other.gameObject.layer) & detectionLayer) != 0)
         {
-            OpenDoor();
-            DepressPlate();
+            objectsOnPlate++;
+            if (objectsOnPlate == 1)
+            {
+                OpenDoor();
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(triggeringTag) && isOpen)
+        if (((1 << other.gameObject.layer) & detectionLayer) != 0)
         {
-            CloseDoor();
-            ResetPlate();
+            objectsOnPlate--;
+            if (objectsOnPlate <= 0)
+            {
+                CloseDoor();
+            }
         }
+    }
+
+    private void Update()
+    {
+        Vector3 targetPosition = objectsOnPlate > 0 ? plateInitialPos + pressedOffset : plateInitialPos;
+        plateVisual.localPosition = Vector3.Lerp(plateVisual.localPosition, targetPosition, Time.deltaTime * pressSpeed);
     }
 
     private void OpenDoor()
     {
-        isOpen = true;
-        door.DOMove(doorClosedPos + openPositionOffset, doorOpenDuration).SetEase(Ease.OutQuad);
+        if (doorTransform != null)
+        {
+            doorTransform.DOMove(doorInitialPos + doorOpenOffset, doorMoveDuration).SetEase(doorEase);
+        }
     }
 
     private void CloseDoor()
     {
-        isOpen = false;
-        door.DOMove(doorClosedPos, doorOpenDuration).SetEase(Ease.InQuad);
-    }
-
-    private void DepressPlate()
-    {
-        transform.DOMoveY(plateStartPos.y - plateDepressDistance, plateDepressDuration).SetEase(Ease.OutQuad);
-    }
-
-    private void ResetPlate()
-    {
-        transform.DOMoveY(plateStartPos.y, plateDepressDuration).SetEase(Ease.InQuad);
+        if (stayOpenWhilePressed && doorTransform != null)
+        {
+            doorTransform.DOMove(doorInitialPos, doorMoveDuration).SetEase(doorEase);
+        }
     }
 }
