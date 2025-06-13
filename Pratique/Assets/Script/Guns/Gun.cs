@@ -12,6 +12,7 @@ public class Gun : MonoBehaviour
     public GameObject shootParticule;
     public GameObject normalHitParticule;
     public LayerMask layerMask;
+    public WeaponRecoil weaponRecoil;
 
     [Header("Type")]
     public bool projectile = false; // If the fired bullet is a projectile
@@ -76,6 +77,16 @@ public class Gun : MonoBehaviour
         currentAmmo = Ammo;
         finalDamage = damage;
         finalPlayerKnockback = playerKnockback;
+
+        if (weaponRecoil == null)
+        {
+            // Tenter de trouver le WeaponRecoil sur le même GameObject
+            weaponRecoil = GetComponent<WeaponRecoil>();
+            if (weaponRecoil == null)
+            {
+                Debug.LogError("Gun script: WeaponRecoil component not found! Please assign it in the Inspector or add it to the weapon GameObject.");
+            }
+        }
     }
 
     public void TryShoot()
@@ -92,8 +103,17 @@ public class Gun : MonoBehaviour
         currentAmmo--;
         StartCoroutine(AttackCooldown());
 
-        Animator.SetTrigger("Shoot");
+        if (Animator != null)
+        {
+            Animator.SetTrigger("Shoot");
+        }
+
         Instantiate(shootParticule, firePoint.position, firePoint.rotation);
+
+        if (weaponRecoil != null)
+        {
+            weaponRecoil.ApplyRecoil();
+        }
 
         Vector3 shootDirectionForPlayerKnockback = Vector3.zero;
 
@@ -215,7 +235,11 @@ public class Gun : MonoBehaviour
     {
         if (!reloading && currentAmmo < Ammo)
         {
-            Animator.SetTrigger("Reload");
+            if(Animator != null)
+            {
+                Animator.SetTrigger("Reload");
+            }
+
             StartCoroutine(ReloadCoroutine());
         }
     }
