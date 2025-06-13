@@ -9,7 +9,7 @@ public class ButtonDoor : MonoBehaviour
     [SerializeField] private float doorDuration = 1f;
 
     [Header("Button Animation")]
-    [SerializeField] private Transform buttonVisual; // l'objet visuel du bouton
+    [SerializeField] private Transform buttonVisual; 
     [SerializeField] private float buttonPressDistance = 0.05f;
     [SerializeField] private float buttonPressDuration = 0.1f;
 
