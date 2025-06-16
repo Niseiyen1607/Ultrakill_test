@@ -360,20 +360,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e23673ab9631748915dd1f9cac8da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitScanPrefab: {fileID: 1530557517395408915, guid: 35321ae4cb7a3b242964b2d5db37f7ac,
+  projectilePrefab: {fileID: 8760453400610556396, guid: a839c014706528342ba43e8fa05d12d7,
     type: 3}
-  projectilePrefab: {fileID: 0}
+  playerRigidBody: {fileID: 0}
   firePoint: {fileID: 6163530275927604475}
   Animator: {fileID: 0}
   shootParticule: {fileID: 8464680245460002125, guid: 41b1b892f0c4d7b4e8465f5578482878,
     type: 3}
-  normalHitParticule: {fileID: 5834493549538774107, guid: b1958428ef416834e82d746f3248afe7,
+  hitEffectPrefab: {fileID: 5834493549538774107, guid: b1958428ef416834e82d746f3248afe7,
     type: 3}
   layerMask:
     serializedVersion: 2
     m_Bits: 448
-  weaponRecoil: {fileID: 0}
-  projectile: 0
+  weaponRecoil: {fileID: 6418711119107508036}
+  audioSource: {fileID: 0}
+  shootSound: {fileID: 0}
   Automatic: 0
   destroyOnImpact: 0
   ExploadOnDestroy: 0
@@ -387,34 +388,27 @@ MonoBehaviour:
   attackSpeed: 2
   reloadSpeed: 2
   multishot: 8
-  multishotInterval: 1
   spread: 0.05
   knockback: 2
   playerKnockback: 10
   ricochetCount: 3
   richochetMultiplier: 0
   ricochetRange: 0
-  ricochetSpeed: 0
   pierceCount: 0
   inheritVelocity: 0
   projectileSticky: 0
-  projectileSpeed: 0
+  projectileSpeed: 100
   projectileGravity: 0
-  projectileLifeTime: 0
+  projectileLifeTime: 5
   explosionRadius: 0
   explosionDamage: 0
   explosionKnockback: 0
   canShoot: 1
   attackCooldown: 0
-  multishotCooldown: 0
   reloading: 0
   holdingShoot: 0
   holdingAltShoot: 0
-  attackCooldownTimer: 0
-  multishotCooldownTimer: 0
-  reloadTimer: 0
   currentAmmo: 0
-  currentMultiShot: 0
 --- !u!114 &6418711119107508036
 MonoBehaviour:
   m_ObjectHideFlags: 0

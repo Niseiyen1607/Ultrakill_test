@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,8 @@ public class Sliding : MonoBehaviour
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
         slideTimer = maxSlideTime;
+
+        SoundManager.PlaySound(SoundType.SLIDE);
     }
 
     private void SlidingMovement()

@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,6 +64,8 @@ public class ActivateItem : MonoBehaviour
                     break;
             }
 
+            // Play sound effect
+            SoundManager.PlaySound(SoundType.PICK_UP_ITEM);
             isActivated = true;
             Destroy(gameObject);
         }

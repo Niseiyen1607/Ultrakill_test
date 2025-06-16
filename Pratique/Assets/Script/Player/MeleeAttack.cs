@@ -1,13 +1,13 @@
 using UnityEngine;
-using System.Collections; // N'oubliez pas d'inclure System.Collections pour les Coroutines
+using System.Collections;
+using SmallHedge.SoundManager; 
 
 public class MeleeWeapon : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private Grappling grappling;
     private PlayerCam playerCam;
-
-    private bool isAttacking = false;
+    public bool isAttacking { get; private set; }
 
     [Header("Camera Shake Setting")]
     [SerializeField] private float shakeDuration = 0.2f;
@@ -16,13 +16,14 @@ public class MeleeWeapon : MonoBehaviour
     [SerializeField] private float shakeRandomness = 90f;
 
     [Header("Melee Attack Settings")]
-    [SerializeField] private Transform attackPoint; // The point where the attack is performed, usually at the front of the player
+    [SerializeField] private Transform attackPoint; 
     [SerializeField] private float attackDamage = 20f;
-    [SerializeField] private float attackRange = 2f; // How far the melee attack reaches
-    [SerializeField] private float attackRadius = 1f; // Radius of the melee attack sphere
-    [SerializeField] private LayerMask enemyLayer; // Layer for your enemies
-    [SerializeField] private float enemyKnockbackForce = 15f; // How much to push enemies back
-    [SerializeField] private GameObject hitParticlesPrefab; // Assign your particle system prefab here
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackRadius = 1f;
+    [SerializeField] private LayerMask enemyLayer; 
+    [SerializeField] private float enemyKnockbackForce = 15f; 
+    [SerializeField] private GameObject hitParticlesPrefab; 
+
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class MeleeWeapon : MonoBehaviour
     public void PlayRandomAttackAnimation()
     {
         isAttacking = true;
+        SoundManager.PlaySound(SoundType.KATANA_ATTACK);
 
         int randomAttack = Random.Range(1, 4);
 
@@ -81,7 +83,7 @@ public class MeleeWeapon : MonoBehaviour
                 if (enemyRb != null)
                 {
                     Vector3 knockbackDirection = (hitCollider.transform.position - transform.position).normalized;
-                    knockbackDirection.y = 0; // Keep knockback horizontal for consistency, adjust if vertical knockback is desired
+                    knockbackDirection.y = 0; 
                     enemyRb.AddForce(knockbackDirection * enemyKnockbackForce, ForceMode.Impulse);
                 }
 

@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,12 @@ public class PlayerMovement : MonoBehaviour
     public float maxYSpeed;
 
     public float groundDrag;
+
+    [Header("Footsteps")]
+    private float footstepTimer = 0f;
+    private float footstepInterval;
+    public float walkFootstepInterval = 0.5f;
+    public float sprintFootstepInterval = 0.3f;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -105,6 +112,8 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        HandleFootsteps();
     }
 
     private void FixedUpdate()
@@ -349,4 +358,25 @@ public class PlayerMovement : MonoBehaviour
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
+
+    private void HandleFootsteps()
+    {
+        if (grounded && moveDirection.magnitude > 0.1f && state != MovementState.sliding && state != MovementState.dashing)
+        {
+            footstepInterval = (state == MovementState.sprinting) ? sprintFootstepInterval : walkFootstepInterval;
+
+            footstepTimer += Time.deltaTime;
+
+            if (footstepTimer >= footstepInterval)
+            {
+                SoundManager.PlaySound(SoundType.FOOTSTEP);
+                footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            footstepTimer = footstepInterval;
+        }
+    }
+
 }

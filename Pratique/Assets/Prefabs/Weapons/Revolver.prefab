@@ -201,21 +201,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e23673ab9631748915dd1f9cac8da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitScanPrefab: {fileID: 1530557517395408915, guid: 35321ae4cb7a3b242964b2d5db37f7ac,
+  projectilePrefab: {fileID: 2647206265115123236, guid: 85311ba585168b8468df99bad0c5c8e6,
     type: 3}
-  projectilePrefab: {fileID: 0}
+  playerRigidBody: {fileID: 0}
   firePoint: {fileID: 8080953282567184900}
   Animator: {fileID: 0}
   shootParticule: {fileID: 8464680245460002125, guid: 41b1b892f0c4d7b4e8465f5578482878,
     type: 3}
-  normalHitParticule: {fileID: 5834493549538774107, guid: b1958428ef416834e82d746f3248afe7,
+  hitEffectPrefab: {fileID: 5834493549538774107, guid: b1958428ef416834e82d746f3248afe7,
     type: 3}
   layerMask:
     serializedVersion: 2
     m_Bits: 448
-  weaponRecoil: {fileID: 0}
-  projectile: 0
-  Automatic: 1
+  weaponRecoil: {fileID: 8175890920300965296}
+  audioSource: {fileID: 0}
+  shootSound: {fileID: 0}
+  Automatic: 0
   destroyOnImpact: 0
   ExploadOnDestroy: 0
   ricochetOnHit: 1
@@ -228,34 +229,27 @@ MonoBehaviour:
   attackSpeed: 1
   reloadSpeed: 2
   multishot: 1
-  multishotInterval: 1
-  spread: 0.05
+  spread: 0.01
   knockback: 2
   playerKnockback: 0
   ricochetCount: 3
   richochetMultiplier: 0.5
   ricochetRange: 20
-  ricochetSpeed: 0.2
   pierceCount: 0
   inheritVelocity: 0
   projectileSticky: 0
-  projectileSpeed: 0
+  projectileSpeed: 45
   projectileGravity: 0
-  projectileLifeTime: 0
+  projectileLifeTime: 5
   explosionRadius: 0
   explosionDamage: 0
   explosionKnockback: 0
   canShoot: 1
   attackCooldown: 0
-  multishotCooldown: 0
   reloading: 0
   holdingShoot: 0
   holdingAltShoot: 0
-  attackCooldownTimer: 0
-  multishotCooldownTimer: 0
-  reloadTimer: 0
   currentAmmo: 0
-  currentMultiShot: 0
 --- !u!114 &8175890920300965296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,7 +361,7 @@ Transform:
   m_GameObject: {fileID: 8567934003711240657}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0019, y: 0.2307, z: 0.6011}
+  m_LocalPosition: {x: -0.0019, y: 0.2307, z: 0.876}
   m_LocalScale: {x: 0.16, y: 0.12, z: 0.42}
   m_ConstrainProportionsScale: 0
   m_Children: []

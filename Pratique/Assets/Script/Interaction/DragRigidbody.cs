@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -123,5 +124,10 @@ public class DragRigidbody : MonoBehaviour
     {
         if (lr != null)
             lr.positionCount = 0;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        SoundManager.PlaySoundAtPosition(SoundType.ITEM_CONTACT, collision.contacts[0].point, 0.5f, 1f, 30f);
     }
 }

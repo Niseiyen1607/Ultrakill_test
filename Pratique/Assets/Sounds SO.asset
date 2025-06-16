@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad1b0a0ca6dbef438d3c8e1821b9778, type: 3}
+  m_Name: Sounds SO
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: FOOTSTEP
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: fb1d60e6cb0c75744a9dcb1fec734763, type: 3}
+    - {fileID: 8300000, guid: 16348786c12c82640a0f3aafa808c94e, type: 3}
+    - {fileID: 8300000, guid: 281eade3a0bc2094aba0ce04eb7b98df, type: 3}
+    - {fileID: 8300000, guid: d374e73e96ebd9943be3d325f46e5b7a, type: 3}
+    - {fileID: 8300000, guid: f8ae4c9656a3a424aabe1cc6b987a383, type: 3}
+  - name: JUMP
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 191238cfb51048540958313034ae315a, type: 3}
+  - name: DASH
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: WALL_RUN
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: SLIDE
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 5029d3b4645c065438f6d112b716c624, type: 3}
+    - {fileID: 8300000, guid: d2567acd93480b34b9645111388012a6, type: 3}
+    - {fileID: 8300000, guid: 4007692149232b740b217be6fc85011e, type: 3}
+  - name: KATANA_ATTACK
+    volume: 1
+    mixer: {fileID: -152615870819846742, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: a5084a127e16f1c45a3265d64d460512, type: 3}
+    - {fileID: 8300000, guid: 9326f11b528cf104e933c0eecb0ed4f1, type: 3}
+    - {fileID: 8300000, guid: 59255a5c27df2e145b786dbfd518363a, type: 3}
+  - name: GRAPPLE_HOOK
+    volume: 1
+    mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: aef8bce46aef0984fa03492755f9428e, type: 3}
+  - name: GRAPPLE_HOOK_ATTACH
+    volume: 1
+    mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 76b72b34ac793fd4681be1c4ba6544a1, type: 3}
+  - name: GRAPPLE_HOOK_RELEASE
+    volume: 1
+    mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: ab38396880fa1b3458bc85469536eb0c, type: 3}
+  - name: GRAPPLE_HOOK_PULL
+    volume: 1
+    mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: b56cffcad601e2d42b34ad374e8458c1, type: 3}
+  - name: GLASSE_BREAK
+    volume: 1
+    mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: f967f7b0d05cbb7419d9d539d522f806, type: 3}
+  - name: DOOR_OPEN
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: DOOR_CLOSE
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: PICK_UP_ITEM
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: d78a3438b6a600148ad466ed039fcc8b, type: 3}
+  - name: ITEM_CONTACT
+    volume: 1
+    mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: c68cb6f0b7229954483d13a5027a27aa, type: 3}
+    - {fileID: 8300000, guid: c23e1c33eedab78479c1237510468675, type: 3}
+    - {fileID: 8300000, guid: 111130291e3982c43b4366dae0f6666a, type: 3}
+    - {fileID: 8300000, guid: 07b3128b0a2ea3e4e993ea79dfaf999f, type: 3}
+    - {fileID: 8300000, guid: 38142406b64a69544a89cc17010d97a1, type: 3}
+  - name: HIT
+    volume: 1
+    mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds: []

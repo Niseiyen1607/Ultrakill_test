@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,6 +46,11 @@ public class WallRun : MonoBehaviour
     public PlayerCam cam;
     private PlayerMovement pm;
     private Rigidbody rb;
+
+    [Header("Audio")]
+    public float footstepInterval = 0.5f; 
+    private float footstepTimer = 0f;
+
 
     private void Start()
     {
@@ -144,7 +150,6 @@ public class WallRun : MonoBehaviour
         rb.useGravity = useGravity;
 
         Vector3 wallNormal = wallRight ? rightWallhit.normal : leftWallhit.normal;
-
         Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
 
         if ((orientation.forward - wallForward).magnitude > (orientation.forward - -wallForward).magnitude)
@@ -166,6 +171,13 @@ public class WallRun : MonoBehaviour
         // weaken gravity
         if (useGravity)
             rb.AddForce(transform.up * gravityCounterForce, ForceMode.Force);
+
+        footstepTimer -= Time.deltaTime;
+        if (footstepTimer <= 0f)
+        {
+            SoundManager.PlaySound(SoundType.FOOTSTEP);
+            footstepTimer = footstepInterval;
+        }
     }
 
     private void StopWallRun()
