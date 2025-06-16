@@ -854,6 +854,11 @@ PrefabInstance:
       objectReference: {fileID: 1883958273}
     - target: {fileID: 1058161332764757661, guid: 04a77f7ed9d367b46a196f836bad56b4,
         type: 3}
+      propertyPath: playerRb
+      value: 
+      objectReference: {fileID: 1883958279}
+    - target: {fileID: 1058161332764757661, guid: 04a77f7ed9d367b46a196f836bad56b4,
+        type: 3}
       propertyPath: playerMovement
       value: 
       objectReference: {fileID: 1883958274}
@@ -866,6 +871,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: KataPosition
+      objectReference: {fileID: 0}
+    - target: {fileID: 4988774104027236417, guid: 04a77f7ed9d367b46a196f836bad56b4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1733,6 +1743,7 @@ MonoBehaviour:
   sliding: 0
   wallrunning: 0
   dashing: 0
+  overrideGravity: 0
 --- !u!114 &1883958275
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ TagManager:
   - GrapplePoint
   - SpecialKnockbackPlate
   - enemyGrapplePoint
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - GrappingPoint
   - Interactive
   - WallRun
-  - 
+  - PredefinedRicochet
   - 
   - 
   - 

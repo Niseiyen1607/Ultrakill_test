@@ -87,6 +87,8 @@ public class PlayerMovement : MonoBehaviour
     public bool wallrunning;
     public bool dashing;
 
+    public bool overrideGravity = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -298,7 +300,8 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         // turn gravity off while on slope
-        rb.useGravity = !OnSlope();
+        if (!overrideGravity)
+            rb.useGravity = !OnSlope();
     }
 
     private void SpeedControl()

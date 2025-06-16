@@ -1679,11 +1679,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 4.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8853973163042120878}
   - {fileID: 5075986901585479800}
+  - {fileID: 4318231620224967072}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2723553632167134916
@@ -1694,7 +1695,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5616137812350104230}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 150
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1711,7 +1712,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &8976976943723557984
 CapsuleCollider:
@@ -1732,7 +1733,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.54
+  m_Radius: 0.96
   m_Height: 4.03
   m_Direction: 1
   m_Center: {x: 0, y: 1.74, z: 0}
@@ -1748,14 +1749,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51cfceaa3c425df47b002ea0321d356e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 50
+  currentHealth: 0
   hitEffect: {fileID: 5834493549538774107, guid: 5fc21b48c997d9a478db676aa7992529,
     type: 3}
   deathEffect: {fileID: 419028545046712320, guid: cc480a9fb265e0f468524f3408ef5956,
     type: 3}
+  pushForce: 30
   ragdollBodies: []
   ragdollColliders: []
   mainCollider: {fileID: 8976976943723557984}
+  LeftLeg: {fileID: 7456550784612801559}
+  RightLeg: {fileID: 4115896851274640396}
 --- !u!1 &6072856661835100659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,6 +2184,37 @@ Transform:
   m_Children:
   - {fileID: 8899656513543130382}
   m_Father: {fileID: 8853973163042120878}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8777350609910903235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4318231620224967072}
+  m_Layer: 8
+  m_Name: EnemyGrapplePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4318231620224967072
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8777350609910903235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8923426101985410986}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8881819239225513181
 GameObject:

@@ -5,14 +5,15 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [Header("Reference")]
-    public GameObject projectilePrefab; // Le seul préfabriqué nécessaire
+    public GameObject projectilePrefab;
     public Rigidbody playerRigidBody;
     public Transform firePoint;
     public Animator Animator;
     public GameObject shootParticule;
-    public GameObject hitEffectPrefab; // Pour les particules d'impact
-    public LayerMask layerMask; // Le projectile utilisera ce layer mask
+    public GameObject hitEffectPrefab;
+    public LayerMask layerMask; 
     public WeaponRecoil weaponRecoil;
+    public PlayerCam playerCam;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip shootSound;
 
@@ -63,6 +64,12 @@ public class Gun : MonoBehaviour
     public float currentAmmo;
     private float finalPlayerKnockback;
 
+    [Header("Camera Shake Setting")]
+    [SerializeField] private float shakeDuration = 0.2f;
+    [SerializeField] private float shakeStrength = 0.2f;
+    [SerializeField] private int shakeVibrato = 10;
+    [SerializeField] private float shakeRandomness = 90f;
+
     private void Awake()
     {
         currentAmmo = Ammo;
@@ -76,6 +83,8 @@ public class Gun : MonoBehaviour
                 Debug.LogError("Gun script: WeaponRecoil component not found!");
             }
         }
+
+        playerCam = FindObjectOfType<PlayerCam>();
     }
 
     public void TryShoot()
@@ -95,6 +104,7 @@ public class Gun : MonoBehaviour
         if (shootParticule != null) Instantiate(shootParticule, firePoint.position, firePoint.rotation);
         if (weaponRecoil != null) weaponRecoil.ApplyRecoil();
         if (audioSource != null && shootSound != null) audioSource.PlayOneShot(shootSound);
+        playerCam.DoCameraShake(shakeDuration, shakeStrength, shakeVibrato, shakeRandomness);
 
         // Applique le knockback sur le joueur
         Vector3 playerKnockbackDirection = -Camera.main.transform.forward;
@@ -110,11 +120,9 @@ public class Gun : MonoBehaviour
                 continue;
             }
 
-            // Calcule la direction de tir avec le spread
-            Vector3 shootDirection = ApplySpread();
+            Vector3 shootDirection = GetShootDirectionFromCenter();
+            GameObject projGO = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
 
-            // Instancie le projectile
-            GameObject projGO = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
             Bullet projScript = projGO.GetComponent<Bullet>();
 
             if (projScript != null)
@@ -156,16 +164,28 @@ public class Gun : MonoBehaviour
         reloading = false;
     }
 
-    private Vector3 ApplySpread()
+    private Vector3 GetShootDirectionFromCenter()
     {
-        Vector3 shootDirection = Camera.main.transform.forward;
-        shootDirection += new Vector3(
+        Vector3 direction = Camera.main.transform.forward;
+
+        Ray ray = new Ray(Camera.main.transform.position, direction);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f, layerMask))
+        {
+            direction = (hit.point - firePoint.position).normalized;
+        }
+        else
+        {
+            direction = (Camera.main.transform.position + Camera.main.transform.forward * 1000f - firePoint.position).normalized;
+        }
+
+        direction += new Vector3(
             Random.Range(-spread, spread),
             Random.Range(-spread, spread),
             Random.Range(-spread, spread)
         );
-        shootDirection.Normalize();
-        return shootDirection;
+
+        return direction.normalized;
     }
 
     private IEnumerator AttackCooldown()
@@ -175,8 +195,6 @@ public class Gun : MonoBehaviour
         attackCooldown = false;
     }
 
-    // Les méthodes Explode, Ricochet, FindNearestEnemy, SpawnTrail et ApplyDamage ont été enlevées
-    // car leur logique est maintenant entièrement gérée par le script Projectile.cs
 
     private void OnDrawGizmosSelected()
     {

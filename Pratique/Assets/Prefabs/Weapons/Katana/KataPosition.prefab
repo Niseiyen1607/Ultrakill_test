@@ -5800,6 +5800,7 @@ MonoBehaviour:
   gunTip: {fileID: 5372726569294382070}
   camera: {fileID: 0}
   player: {fileID: 0}
+  playerRb: {fileID: 0}
   maxDistance: 100
   enemyGrappleSpeed: 500
   enemyGrappleMinDistance: 1
@@ -5807,11 +5808,17 @@ MonoBehaviour:
   enemyGrappleVerticalBoost: 100
   enemyAutoAimSearchRadius: 5
   enemyAutoAimMaxDistance: 70
+  enemyGrappleDistanceAttack: 1
   springJointSpring: 4.5
   springJointDamper: 7
-  springJointMassScale: 4.5
+  springJointMassScale: 10
   springJointMinDistanceMultiplier: 0.25
   springJointMaxDistanceMultiplier: 0.5
+  enemySpringJointSpring: 100
+  enemySpringJointDamper: 1
+  enemySpringJointMassScale: 1
+  enemySpringJointMinDistanceMultiplier: 0
+  enemySpringJointMaxDistanceMultiplier: 0.2
   autoAimSearchRadius: 3
   autoAimMaxDistance: 50
 --- !u!120 &9078918660822762467

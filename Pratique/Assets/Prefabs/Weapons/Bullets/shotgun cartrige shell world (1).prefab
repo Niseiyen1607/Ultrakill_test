@@ -260,3 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b26e1088ee87a47a25a383a0075cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  predefinedRicochetLayer:
+    serializedVersion: 2
+    m_Bits: 0

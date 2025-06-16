@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System; // If you want to use Lists for leg targets
 
 public class RobotWalker : MonoBehaviour
 {
@@ -16,8 +15,8 @@ public class RobotWalker : MonoBehaviour
     [SerializeField] private float raycastOffset = 1f;
 
     [Header("Step Timing")]
-    public float initialStepDelay = 0f;
-    public RobotWalker otherLeg;
+    [SerializeField] private float initialStepDelay = 0f;
+    [SerializeField] private RobotWalker otherLeg;
 
     private Vector3 newPosition;
     private Vector3 currentPosition;
@@ -32,7 +31,6 @@ public class RobotWalker : MonoBehaviour
         currentPosition = newPosition;
         oldPosition = newPosition;
 
-        // Appliquer un décalage initial pour l'alternance
         stepTimer = -initialStepDelay;
     }
 
@@ -73,7 +71,6 @@ public class RobotWalker : MonoBehaviour
         }
         else
         {
-            // Avance le timer même si on ne marche pas
             stepTimer += Time.deltaTime;
         }
     }

@@ -20,28 +20,36 @@ public class Grappling : MonoBehaviour
     private MeleeWeapon meleeWeapon;
 
     [SerializeField] private Transform gunTip, camera, player;
-    private Rigidbody playerRb;
+    [SerializeField] private Rigidbody playerRb;
 
     [SerializeField] private float maxDistance = 100f;
 
     [Header("Enemy Grapple Settings")]
-    public float enemyGrappleSpeed = 30f;
-    public float enemyGrappleMinDistance = 5f;
-    public float enemyGrappleBoostForce = 15f;
-    public float enemyGrappleVerticalBoost = 5f;
-    public float enemyAutoAimSearchRadius = 5f;
-    public float enemyAutoAimMaxDistance = 70f;
+    [SerializeField] private float enemyGrappleSpeed = 30f;
+    [SerializeField] private float enemyGrappleMinDistance = 5f;
+    [SerializeField] private float enemyGrappleBoostForce = 15f;
+    [SerializeField] private float enemyGrappleVerticalBoost = 5f;
+    [SerializeField] private float enemyAutoAimSearchRadius = 5f;
+    [SerializeField] private float enemyAutoAimMaxDistance = 70f;
+    [SerializeField] private float enemyGrappleDistanceAttack = 1f;
 
-    [Header("Standard Grapple Settings")]
-    public float springJointSpring = 4.5f;
-    public float springJointDamper = 7f;
-    public float springJointMassScale = 4.5f;
-    public float springJointMinDistanceMultiplier = 0.25f;
-    public float springJointMaxDistanceMultiplier = 0.8f;
+    [Header("Standard Spring Settings")]
+    [SerializeField] private float springJointSpring = 4.5f;
+    [SerializeField] private float springJointDamper = 7f;
+    [SerializeField] private float springJointMassScale = 4.5f;
+    [SerializeField] private float springJointMinDistanceMultiplier = 0.25f;
+    [SerializeField] private float springJointMaxDistanceMultiplier = 0.8f;
+
+    [Header("Enemy Spring Settings")]
+    [SerializeField] private float enemySpringJointSpring = 100f;
+    [SerializeField] private float enemySpringJointDamper = 10f;
+    [SerializeField] private float enemySpringJointMassScale = 1f;
+    [SerializeField] private float enemySpringJointMinDistanceMultiplier = 0f;
+    [SerializeField] private float enemySpringJointMaxDistanceMultiplier = 0.2f;
 
     [Header("Grapple Point Auto-Aim")]
-    public float autoAimSearchRadius = 3f;
-    public float autoAimMaxDistance = 50f;
+    [SerializeField] private float autoAimSearchRadius = 3f;
+    [SerializeField] private float autoAimMaxDistance = 50f;
 
     private SpringJoint springJoint;
     private bool isGrapplingEnemy = false;
@@ -58,7 +66,6 @@ public class Grappling : MonoBehaviour
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
-        playerRb = player.GetComponent<Rigidbody>();
         meleeWeapon = GetComponent<MeleeWeapon>();
     }
 
@@ -66,12 +73,10 @@ public class Grappling : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Input: Souris clic droit enfoncé.");
             StartGrapple();
         }
         if (Input.GetMouseButtonUp(1))
         {
-            Debug.Log("Input: Souris clic droit relâché.");
             StopGrapple();
         }
 
@@ -89,7 +94,6 @@ public class Grappling : MonoBehaviour
             if (!playedPullSound)
             {
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_PULL);
-                Debug.Log("Son joué: GRAPPLE_HOOK_PULL (grappin ennemi, première fois)");
                 playedPullSound = true;
             }
 
@@ -100,7 +104,7 @@ public class Grappling : MonoBehaviour
 
             float distanceToEnemy = Vector3.Distance(player.position, grapplePoint);
 
-            if (distanceToEnemy < enemyGrappleMinDistance + 1f && !hasPreAttacked)
+            if (distanceToEnemy < enemyGrappleMinDistance + enemyGrappleDistanceAttack && !hasPreAttacked)
             {
                 meleeWeapon.PerformMeleeAttack();
                 meleeWeapon.GrappingAnimation();
@@ -140,7 +144,6 @@ public class Grappling : MonoBehaviour
 
     private void StartGrapple()
     {
-        Debug.Log("StartGrapple() appelé.");
         wasGrapplingBeforeStop = IsGrappling();
         StopGrapple();
 
@@ -149,7 +152,6 @@ public class Grappling : MonoBehaviour
 
         if (Physics.Raycast(camera.position, camera.forward, out hit, enemyAutoAimMaxDistance, combinedEnemyAndObstacleLayer))
         {
-            Debug.Log($"Raycast ennemi/obstacle touché à: {hit.point} sur objet: {hit.collider.name}");
             _lastAutoAimHitPoint = hit.point;
             _drawAutoAimGizmo = true;
 
@@ -157,21 +159,22 @@ public class Grappling : MonoBehaviour
 
             if (((1 << hit.collider.gameObject.layer) & whatIsEnemy) != 0)
             {
-                Debug.Log($"Raycast direct sur ennemi: {hit.transform.name}");
                 Transform enemyGrapplePoint = hit.transform.Find("EnemyGrapplePoint");
 
                 if (enemyGrapplePoint != null)
                 {
+                    SetupEnemySpringJoint();
                     bestTarget = enemyGrapplePoint;
                 }
                 else
                 {
                     bestTarget = hit.transform; 
                 }
+
+                playerRb.useGravity = false;
             }
             else
             {
-                Debug.Log($"Raycast sur obstacle ({hit.collider.name}), recherche d'ennemi proche.");
                 bestTarget = FindBestEnemyForGrapple(hit.point);
                 if (bestTarget != null)
                 {
@@ -185,11 +188,8 @@ public class Grappling : MonoBehaviour
 
             if (bestTarget != null)
             {
-                Debug.Log($"Grappin accroché à un ennemi: {bestTarget.name}.");
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK);
-                Debug.Log("Son joué: GRAPPLE_HOOK (lancement, cible trouvée)");
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_ATTACH);
-                Debug.Log("Son joué: GRAPPLE_HOOK_ATTACH (ennemi)");
 
                 grapplePoint = bestTarget.position;
                 grappledTargetTransform = bestTarget;
@@ -198,56 +198,68 @@ public class Grappling : MonoBehaviour
 
                 lr.positionCount = 2;
                 lr.enabled = true;
-                Debug.Log($"Grappling Enemy: {bestTarget.name}!");
+
+                playerMovement.overrideGravity = true;
+                playerRb.useGravity = false;
+
                 return; 
             }
-        }
-        else
-        {
-            Debug.Log("Raycast ennemi/obstacle n'a rien touché.");
         }
 
         if (Physics.Raycast(camera.position, camera.forward, out hit, autoAimMaxDistance, whatIsObstacle))
         {
-            Debug.Log($"Raycast obstacle/grapple point touché à: {hit.point} sur objet: {hit.collider.name}");
             _lastAutoAimHitPoint = hit.point;
             _drawAutoAimGizmo = true;
 
             Transform bestGrapplePoint = FindBestGrapplePointAroundHit(hit.point);
             if (bestGrapplePoint != null)
             {
-                Debug.Log($"Grappin accroché à un point de grappin: {bestGrapplePoint.name}.");
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK);
-                Debug.Log("Son joué: GRAPPLE_HOOK (lancement, cible trouvée)");
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_ATTACH);
-                Debug.Log("Son joué: GRAPPLE_HOOK_ATTACH (point de grappin)");
 
                 grapplePoint = bestGrapplePoint.position;
                 grappledTargetTransform = bestGrapplePoint;
                 isGrapplingStandard = true;
                 isGrapplingEnemy = false;
                 SetupSpringJoint();
-                Debug.Log("Grappling to Auto-Aimed Grapple Point near general hit!");
                 return;
             }
-            else
-            {
-                Debug.Log("Raycast obstacle touché, mais aucun point de grappin trouvé via auto-aim.");
-            }
-        }
-        else
-        {
-            Debug.Log("Raycast point de grappin n'a rien touché.");
-        }
 
-        Debug.Log("Aucune cible de grappin valide trouvée. Grappin échoué.");
+        }
 
         playedPullSound = false;
     }
 
+    private void StopGrapple()
+    {
+        hasPreAttacked = false;
+
+        if (IsGrappling() || wasGrapplingBeforeStop)
+        {
+            SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_RELEASE);
+        }
+
+        if (springJoint != null)
+        {
+            Destroy(springJoint);
+        }
+
+        isGrapplingEnemy = false;
+        isGrapplingStandard = false;
+        grappledTargetTransform = null;
+        lr.positionCount = 0;
+        lr.enabled = false;
+
+        _drawAutoAimGizmo = false;
+        playedPullSound = false;
+        _lastAutoAimHitPoint = Vector3.zero;
+        wasGrapplingBeforeStop = false;
+
+        playerMovement.overrideGravity = false;
+    }
+
     private void SetupSpringJoint()
     {
-        Debug.Log("SpringJoint configuré.");
         springJoint = player.gameObject.AddComponent<SpringJoint>();
         springJoint.autoConfigureConnectedAnchor = false;
         springJoint.connectedAnchor = grapplePoint;
@@ -259,6 +271,24 @@ public class Grappling : MonoBehaviour
         springJoint.spring = springJointSpring;
         springJoint.damper = springJointDamper;
         springJoint.massScale = springJointMassScale;
+
+        lr.positionCount = 2;
+        lr.enabled = true;
+    }
+
+    private void SetupEnemySpringJoint()
+    {
+        springJoint = player.gameObject.AddComponent<SpringJoint>();
+        springJoint.autoConfigureConnectedAnchor = false;
+        springJoint.connectedAnchor = grapplePoint;
+
+        float distanceFromPoint = Vector3.Distance(player.position, grapplePoint);
+        springJoint.maxDistance = distanceFromPoint * enemySpringJointMaxDistanceMultiplier;
+        springJoint.minDistance = distanceFromPoint * enemySpringJointMinDistanceMultiplier;
+
+        springJoint.spring = enemySpringJointSpring;
+        springJoint.damper = enemySpringJointDamper;
+        springJoint.massScale = enemySpringJointMassScale;
 
         lr.positionCount = 2;
         lr.enabled = true;
@@ -293,7 +323,6 @@ public class Grappling : MonoBehaviour
         return bestTarget;
     }
 
-
     private Transform FindBestGrapplePointAroundHit(Vector3 searchCenter)
     {
         Transform bestTarget = null;
@@ -318,40 +347,6 @@ public class Grappling : MonoBehaviour
             }
         }
         return bestTarget;
-    }
-
-    private void StopGrapple()
-    {
-        hasPreAttacked = false;
-
-        if (IsGrappling() || wasGrapplingBeforeStop)
-        {
-            SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_RELEASE);
-            Debug.Log("Son joué: GRAPPLE_HOOK_RELEASE");
-        }
-        else
-        {
-            Debug.Log("StopGrapple() appelé, mais grappin inactif. Pas de son de relâchement.");
-        }
-
-
-        if (springJoint != null)
-        {
-            Destroy(springJoint);
-            Debug.Log("SpringJoint détruit.");
-        }
-
-        isGrapplingEnemy = false;
-        isGrapplingStandard = false;
-        grappledTargetTransform = null;
-        lr.positionCount = 0;
-        lr.enabled = false;
-
-        _drawAutoAimGizmo = false;
-        playedPullSound = false;
-        _lastAutoAimHitPoint = Vector3.zero;
-        wasGrapplingBeforeStop = false; 
-        Debug.Log("Grappin arrêté et réinitialisé.");
     }
 
     public bool IsGrappling()

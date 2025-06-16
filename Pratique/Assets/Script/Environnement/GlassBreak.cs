@@ -10,7 +10,7 @@ public class GlassBreak : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Bullet"))
         {
             SoundManager.PlaySound(SoundType.GLASSE_BREAK, null, 0.5f);
             Instantiate(glassBreakParticule, point.transform.position, Quaternion.identity);

@@ -9,6 +9,8 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private GameObject owner;
     private LayerMask layerMask;
+    [SerializeField] private LayerMask predefinedRicochetLayer;
+
 
     private float damage;
     private float minDamage;
@@ -80,12 +82,19 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == owner || alreadyHit.Contains(collision.gameObject))
-        {
-            return;
-        }
+        int hitLayer = collision.gameObject.layer;
 
-        if (((1 << collision.gameObject.layer) & layerMask) != 0)
+        if (((1 << hitLayer) & predefinedRicochetLayer) != 0)
+        {
+            RicochetPoint rp = collision.gameObject.GetComponent<RicochetPoint>();
+            if (rp != null)
+            {
+                Debug.Log("Hit predefined ricochet point");
+                StartCoroutine(FollowRicochetPath(rp));
+                return;
+            }
+        }
+        else if (((1 << hitLayer) & layerMask) != 0)
         {
             HandleHit(collision);
         }
@@ -98,6 +107,8 @@ public class Bullet : MonoBehaviour
 
     private void HandleHit(Collision collision)
     {
+        Debug.Log($"Bullet hit: {collision.gameObject.name} at {collision.contacts[0].point}");
+
         // Instancie les particules d'impact
         if (hitEffectPrefab)
         {
@@ -151,9 +162,8 @@ public class Bullet : MonoBehaviour
         GameObject nearest = FindNearestEnemy(fromPosition);
         if (nearest != null)
         {
-            // Change la direction de la balle vers la nouvelle cible
             Vector3 directionToTarget = (nearest.transform.position - transform.position).normalized;
-            rb.velocity = directionToTarget * rb.velocity.magnitude; // Conserve la vitesse actuelle
+            rb.velocity = directionToTarget * rb.velocity.magnitude; 
             return true;
         }
         return false;
@@ -177,6 +187,26 @@ public class Bullet : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    private IEnumerator FollowRicochetPath(RicochetPoint startPoint)
+    {
+        RicochetPoint current = startPoint;
+
+        while (current != null && current.nextTarget != null)
+        {
+            Vector3 direction = (current.nextTarget.position - transform.position).normalized;
+            rb.velocity = direction * rb.velocity.magnitude;
+
+            yield return new WaitForSeconds(0.05f);
+            transform.position = current.nextTarget.position;
+
+            current = current.nextTarget.GetComponent<RicochetPoint>();
+        }
+
+        if (explodeOnDestroy)
+            Explode(transform.position);
+        Destroy(gameObject);
     }
 
     private void OnDestroy()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using DG.Tweening; // Don't forget to add this using statement for DoTween!
+using DG.Tweening; 
 
 public class DamagePopUpGenerator : MonoBehaviour
 {
@@ -11,10 +11,10 @@ public class DamagePopUpGenerator : MonoBehaviour
     [SerializeField] public GameObject damagePopUpPrefab;
 
     [Header("DoTween Animation Settings")]
-    [SerializeField] private float moveYAmount = 1.5f; // How high the pop-up moves
-    [SerializeField] private float duration = 1f; // How long the animation lasts
-    [SerializeField] private Ease easeType = Ease.OutQuad; // The easing function for movement
-    [SerializeField] private float fadeOutDelay = 0.5f; // When the fade out starts
+    [SerializeField] private float moveYAmount = 1.5f; 
+    [SerializeField] private float duration = 1f; 
+    [SerializeField] private Ease easeType = Ease.OutQuad; 
+    [SerializeField] private float fadeOutDelay = 0.5f; 
 
     private void Awake()
     {
@@ -25,14 +25,6 @@ public class DamagePopUpGenerator : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P)) // For testing purposes
-        {
-            CreatePopUp(Vector3.one, Random.Range(0, 1000).ToString(), Color.yellow);
         }
     }
 
@@ -59,13 +51,16 @@ public class DamagePopUpGenerator : MonoBehaviour
         zoomSeq.Append(popUp.transform.DOScale(0.9f, 0.05f).SetEase(Ease.InOutSine));
         zoomSeq.Append(popUp.transform.DOScale(1f, 0.05f).SetEase(Ease.OutSine));
 
+        // Use moveYAmount and easeType
+        popUp.transform.DOMoveY(popUp.transform.position.y + moveYAmount, duration).SetEase(easeType);
+
+        // Fade out
         float fadeDuration = 0.3f;
-        tmpText.DOFade(0f, fadeDuration).SetEase(Ease.InQuad).SetDelay(duration - fadeDuration);
+        tmpText.DOFade(0f, fadeDuration).SetEase(easeType).SetDelay(fadeOutDelay);
 
         DOVirtual.DelayedCall(duration, () =>
         {
             Destroy(popUp);
         });
     }
-
 }

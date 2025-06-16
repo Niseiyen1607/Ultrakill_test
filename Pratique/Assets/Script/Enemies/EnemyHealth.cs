@@ -3,17 +3,21 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Health Settings")]
-    public float maxHealth = 100f;
-    private float currentHealth;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth;
 
     [Header("Effects")]
-    public GameObject hitEffect;
-    public GameObject deathEffect;
+    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private GameObject deathEffect;
 
     [Header("Ragdoll")]
-    public Rigidbody[] ragdollBodies;
-    public Collider[] ragdollColliders;
-    public Collider mainCollider;
+    [SerializeField] private float pushForce = 15f;
+    [SerializeField] private Rigidbody[] ragdollBodies;
+    [SerializeField] private Collider[] ragdollColliders;
+    [SerializeField] private Collider mainCollider;
+
+    [SerializeField] private RobotWalker LeftLeg;
+    [SerializeField] private RobotWalker RightLeg;
 
     private void Awake()
     {
@@ -28,9 +32,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection)
     {
         currentHealth -= amount;
-        Debug.Log($"{gameObject.name} took {amount} damage. Current health: {currentHealth}");
 
-        // Pop-up damage number
         if (DamagePopUpGenerator.Instance != null)
         {
             DamagePopUpGenerator.Instance.CreatePopUp(hitPoint, Mathf.RoundToInt(amount).ToString(), Color.red);
@@ -60,11 +62,14 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         foreach (var rb in ragdollBodies)
         {
-            rb.AddForce(hitDirection * 30f, ForceMode.Impulse);
+            rb.AddForce(hitDirection * pushForce, ForceMode.Impulse);
         }
 
         if (mainCollider != null)
             mainCollider.enabled = false;
+
+        LeftLeg.enabled = false;
+        RightLeg.enabled = false;
 
         Destroy(gameObject, 10f);
     }
