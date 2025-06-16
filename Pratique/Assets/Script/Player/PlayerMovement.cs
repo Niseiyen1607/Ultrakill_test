@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
-    public float sprintSpeed;
     public float slideSpeed;
     public float wallRunSpeed;
 
@@ -29,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     private float footstepTimer = 0f;
     private float footstepInterval;
     public float walkFootstepInterval = 0.5f;
-    public float sprintFootstepInterval = 0.3f;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -44,7 +42,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
@@ -75,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
     public enum MovementState
     {
         walking,
-        sprinting,
         wallrunning,
         crouching,
         dashing,
@@ -110,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
 
         // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching)
+        if (state == MovementState.walking || state == MovementState.crouching)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
@@ -176,9 +172,6 @@ public class PlayerMovement : MonoBehaviour
             if (OnSlope() && rb.velocity.y < 0.1f)
                 desiredMoveSpeed = slideSpeed;
 
-            else
-                desiredMoveSpeed = sprintSpeed;
-
             PlayerCam.DoFov(95f);
         }
 
@@ -189,33 +182,20 @@ public class PlayerMovement : MonoBehaviour
             desiredMoveSpeed = crouchSpeed;
         }
 
-        // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey))
-        {
-            state = MovementState.sprinting;
-            desiredMoveSpeed = sprintSpeed;
-
-            PlayerCam.DoFov(75f);
-        }
-
         // Mode - Walking
         else if (grounded)
         {
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
 
-            PlayerCam.DoFov(60f);
+            PlayerCam.DoFov(80f);
         }
 
         // Mode - Air
         else
         {
             state = MovementState.air;
-
-            if(desiredMoveSpeed < sprintSpeed)
-                desiredMoveSpeed = walkSpeed; 
-            else 
-                desiredMoveSpeed = sprintSpeed;
+            desiredMoveSpeed = walkSpeed;
         }
 
         // check if desiredMoveSpeed has changed drastically
@@ -366,7 +346,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (grounded && moveDirection.magnitude > 0.1f && state != MovementState.sliding && state != MovementState.dashing)
         {
-            footstepInterval = (state == MovementState.sprinting) ? sprintFootstepInterval : walkFootstepInterval;
+            footstepInterval = walkFootstepInterval;
 
             footstepTimer += Time.deltaTime;
 
