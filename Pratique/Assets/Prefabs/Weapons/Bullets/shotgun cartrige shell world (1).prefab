@@ -263,3 +263,4 @@ MonoBehaviour:
   predefinedRicochetLayer:
     serializedVersion: 2
     m_Bits: 0
+  ricochetEffectPrefab: {fileID: 0}

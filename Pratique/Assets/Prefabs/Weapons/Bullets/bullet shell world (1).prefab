@@ -150,6 +150,8 @@ MonoBehaviour:
   predefinedRicochetLayer:
     serializedVersion: 2
     m_Bits: 16384
+  ricochetEffectPrefab: {fileID: 5898164921244572383, guid: 0180815ae541313459642faeb031b54e,
+    type: 3}
 --- !u!96 &399016454326691248
 TrailRenderer:
   serializedVersion: 3

@@ -22,10 +22,9 @@ public class ObjectTriggerOnBullet : MonoBehaviour
             initialPosition = objectToMove.position;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Activate()
     {
-        // Déclencher seulement si c'est une balle
-        if (!hasMoved && collision.gameObject.GetComponent<Bullet>() != null)
+        if (!hasMoved && objectToMove != null)
         {
             hasMoved = true;
             objectToMove.DOMove(initialPosition + moveOffset, moveDuration).SetEase(easing);

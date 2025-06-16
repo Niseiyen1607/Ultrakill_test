@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class Bullet : MonoBehaviour
     private GameObject owner;
     private LayerMask layerMask;
     [SerializeField] private LayerMask predefinedRicochetLayer;
-
+    [SerializeField] private GameObject ricochetEffectPrefab;
 
     private float damage;
     private float minDamage;
@@ -196,10 +197,30 @@ public class Bullet : MonoBehaviour
         while (current != null && current.nextTarget != null)
         {
             Vector3 direction = (current.nextTarget.position - transform.position).normalized;
+
+            if (ricochetEffectPrefab != null)
+            {
+                Instantiate(ricochetEffectPrefab, transform.position, Quaternion.LookRotation(direction));
+            }
+
             rb.velocity = direction * rb.velocity.magnitude;
 
-            yield return new WaitForSeconds(0.05f);
-            transform.position = current.nextTarget.position;
+            yield return transform.DOMove(current.nextTarget.position, 0.2f)
+                                          .SetEase(Ease.Linear)
+                                          .WaitForCompletion();
+
+            // Nouvelle vérification
+            Collider[] hits = Physics.OverlapSphere(transform.position, 0.2f);
+            foreach (var col in hits)
+            {
+                ObjectTriggerOnBullet trigger = col.GetComponent<ObjectTriggerOnBullet>();
+                if (trigger != null)
+                {
+                    Debug.Log("Cristal touché via ricochet !");
+                    trigger.Activate(); // Appel direct sans fausse collision
+                    break;
+                }
+            }
 
             current = current.nextTarget.GetComponent<RicochetPoint>();
         }
@@ -208,6 +229,7 @@ public class Bullet : MonoBehaviour
             Explode(transform.position);
         Destroy(gameObject);
     }
+
 
     private void OnDestroy()
     {
