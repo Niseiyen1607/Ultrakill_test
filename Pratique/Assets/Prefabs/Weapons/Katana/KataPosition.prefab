@@ -105,7 +105,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -285,7 +285,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -430,7 +430,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -575,7 +575,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -808,7 +808,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.3
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1362,8 +1362,8 @@ ParticleSystem:
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: 0.05277333, y: 0.39908668, z: -0.0000010083413}
-    m_Rotation: {x: -0.00042495655, y: 0.00074453803, z: 266.90002}
+    m_Position: {x: 0.03957913, y: 0.15554108, z: 0.00000029469794}
+    m_Rotation: {x: -0.00052452274, y: 0.0011544339, z: 266.90002}
     m_Scale: {x: 1.0000023, y: 0.9999966, z: 0.99999946}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -1443,7 +1443,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.048882958
+      value: 0.29556927
       mode: 0
       spread: 0
       speed:
@@ -5806,7 +5806,7 @@ MonoBehaviour:
   playerRb: {fileID: 0}
   gunTip: {fileID: 5372726569294382070}
   maxDistance: 100
-  enemyGrappleSpeed: 50
+  enemyGrappleSpeed: 75
   enemyGrappleMinDistance: 1
   enemyGrappleBoostForce: 50
   enemyGrappleVerticalBoost: 25
@@ -5819,7 +5819,7 @@ MonoBehaviour:
   springJointMinDistanceMultiplier: 0.25
   springJointMaxDistanceMultiplier: 0.5
   enemySpringJointSpring: 100
-  enemySpringJointDamper: 1
+  enemySpringJointDamper: 10
   enemySpringJointMassScale: 1
   enemySpringJointMinDistanceMultiplier: 0.1
   enemySpringJointMaxDistanceMultiplier: 0.2

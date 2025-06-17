@@ -21,7 +21,6 @@ public class MeleeWeapon : MonoBehaviour
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackRadius = 1f;
     [SerializeField] private LayerMask enemyLayer; 
-    [SerializeField] private float enemyKnockbackForce = 15f; 
     [SerializeField] private GameObject hitParticlesPrefab; 
 
 
@@ -80,14 +79,6 @@ public class MeleeWeapon : MonoBehaviour
                 damageable.TakeDamage(attackDamage, hitPoint, hitDirection);
 
                 SoundManager.PlaySoundAtPosition(SoundType.ENEMIES_HIT, hitPoint);
-
-                Rigidbody enemyRb = hitCollider.GetComponent<Rigidbody>();
-                if (enemyRb != null)
-                {
-                    Vector3 knockbackDirection = (hitCollider.transform.position - transform.position).normalized;
-                    knockbackDirection.y = 0; 
-                    enemyRb.AddForce(knockbackDirection * enemyKnockbackForce, ForceMode.Impulse);
-                }
 
                 if (hitParticlesPrefab != null)
                 {

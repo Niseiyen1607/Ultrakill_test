@@ -12,13 +12,16 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     [SerializeField] private GameObject deathEffect;
 
     [Header("Ragdoll")]
-    [SerializeField] private float pushForce = 15f;
+    [SerializeField] private float pushForce = 1f;
+    [SerializeField] private float upwardForceAmount = 1f;
     [SerializeField] private Rigidbody[] ragdollBodies;
     [SerializeField] private Collider[] ragdollColliders;
     [SerializeField] private Collider mainCollider;
 
     [SerializeField] private RobotWalker LeftLeg;
     [SerializeField] private RobotWalker RightLeg;
+    [SerializeField] private IKArm LeftArm;
+    [SerializeField] private IKArm RightArm;
 
     public bool isDead = false;
 
@@ -59,6 +62,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         Debug.Log($"{gameObject.name} died!");
 
+        if (LeftLeg != null) LeftLeg.enabled = false;
+        if (RightLeg != null) RightLeg.enabled = false;
+        if (LeftArm != null) LeftArm.enabled = false;
+        if (RightArm != null) RightArm.enabled = false;
+
         SoundManager.PlaySoundAtPosition(SoundType.ENEMY_DEATH, transform.position);
 
         if (deathEffect != null)
@@ -68,16 +76,17 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         SetRagdollState(true);
 
+        Vector3 upwardForce = Vector3.up * upwardForceAmount;
+        Vector3 finalForce = (hitDirection.normalized + upwardForce).normalized * pushForce;
+
         foreach (var rb in ragdollBodies)
         {
-            rb.AddForce(hitDirection * pushForce, ForceMode.Impulse);
+            rb.AddForce(finalForce, ForceMode.Impulse);
         }
+
 
         if (mainCollider != null)
             mainCollider.enabled = false;
-
-        LeftLeg.enabled = false;
-        RightLeg.enabled = false;
 
         Destroy(gameObject, 3f);
     }
