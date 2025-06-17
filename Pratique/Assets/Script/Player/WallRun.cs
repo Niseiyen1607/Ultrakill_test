@@ -46,6 +46,7 @@ public class WallRun : MonoBehaviour
     public PlayerCam cam;
     private PlayerMovement pm;
     private Rigidbody rb;
+    [SerializeField] private Grappling grappling;
 
     [Header("Audio")]
     public float footstepInterval = 0.5f; 
@@ -66,6 +67,12 @@ public class WallRun : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (grappling.IsGrapplingEnemy())
+        {
+            rb.useGravity = false;
+            return;
+        }
+
         if (pm.wallrunning)
             WallRunningMovement();
     }

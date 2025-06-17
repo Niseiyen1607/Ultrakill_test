@@ -64,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
     private PlayerCam PlayerCam;
+    [SerializeField] private Grappling grappling;
 
     public MovementState state;
     private MovementState lasteState;
@@ -98,24 +99,41 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
         StateHandler();
 
-        // handle drag
-        if (state == MovementState.walking || state == MovementState.crouching)
-            rb.drag = groundDrag;
-        else
+        if (grappling.IsGrapplingEnemy())
+        {
+            overrideGravity = true;
+            rb.useGravity = false;
             rb.drag = 0;
+        }
+        else
+        {
+            overrideGravity = false;
+            rb.useGravity = !OnSlope();
+
+            if (state == MovementState.walking || state == MovementState.crouching)
+                rb.drag = groundDrag;
+            else
+                rb.drag = 0;
+        }
 
         HandleFootsteps();
     }
 
+
     private void FixedUpdate()
     {
+        if (overrideGravity)
+        {
+            rb.useGravity = false; 
+            return;
+        }
+
         MovePlayer();
     }
 
@@ -259,29 +277,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
         if (OnSlope() && !exitingSlope)
         {
             rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
 
-            if (rb.velocity.y > 0)
+            if (rb.velocity.y > 0) 
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
-        // on ground
         else if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        // in air
+
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        // turn gravity off while on slope
-        if (!overrideGravity)
-            rb.useGravity = !OnSlope();
     }
 
     private void SpeedControl()

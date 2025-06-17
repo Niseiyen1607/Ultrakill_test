@@ -100,7 +100,39 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 111130291e3982c43b4366dae0f6666a, type: 3}
     - {fileID: 8300000, guid: 07b3128b0a2ea3e4e993ea79dfaf999f, type: 3}
     - {fileID: 8300000, guid: 38142406b64a69544a89cc17010d97a1, type: 3}
-  - name: HIT
+  - name: ENEMIES_HIT
     volume: 1
-    mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
-    sounds: []
+    mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: cbe049a08eeba884480c6b11c864dec7, type: 3}
+  - name: BULLET_HIT
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 7d318467bc433eb429785a4d3b9246b2, type: 3}
+  - name: PLAYER_HIT
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 76ac454819a914a4696a549d375d0d68, type: 3}
+  - name: ENEMY_SHOOT
+    volume: 1
+    mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 00464ccbe19b20d489246b1d2413b320, type: 3}
+  - name: ENEMY_DEATH
+    volume: 1
+    mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 46d21e9a35b3ab04489ead20cd5d4143, type: 3}
+  - name: RICOCHET
+    volume: 1
+    mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
+      type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 6017a20ec1c8485479f77932b5665113, type: 3}
+    - {fileID: 8300000, guid: ef76db200dd8c2a4190a90f3c5fd416d, type: 3}
+    - {fileID: 8300000, guid: 9f8dbb5d973966e4d9bd4b3b67ad81c7, type: 3}
+    - {fileID: 8300000, guid: 62fffdf53864f7646ae3bf6df2256c86, type: 3}

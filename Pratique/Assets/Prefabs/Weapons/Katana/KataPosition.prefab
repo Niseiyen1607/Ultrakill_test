@@ -5717,6 +5717,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 9078918660822762467}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 53839564acfeb0049b8c0aef0afc23b5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8021584854266191415}
   m_SourcePrefab: {fileID: 100100000, guid: 53839564acfeb0049b8c0aef0afc23b5, type: 3}
 --- !u!1 &8556032608622886531 stripped
 GameObject:
@@ -5766,7 +5770,7 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   attackDamage: 50
   attackRange: 0
-  attackRadius: 1
+  attackRadius: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -5797,18 +5801,18 @@ MonoBehaviour:
   grapplePointTag: GrapplePoint
   animator: {fileID: 5357480564195881731}
   playerMovement: {fileID: 0}
-  gunTip: {fileID: 5372726569294382070}
   camera: {fileID: 0}
   player: {fileID: 0}
   playerRb: {fileID: 0}
+  gunTip: {fileID: 5372726569294382070}
   maxDistance: 100
-  enemyGrappleSpeed: 500
+  enemyGrappleSpeed: 50
   enemyGrappleMinDistance: 1
-  enemyGrappleBoostForce: 100
-  enemyGrappleVerticalBoost: 100
+  enemyGrappleBoostForce: 50
+  enemyGrappleVerticalBoost: 25
   enemyAutoAimSearchRadius: 5
   enemyAutoAimMaxDistance: 70
-  enemyGrappleDistanceAttack: 1
+  enemyGrappleDistanceAttack: 2
   springJointSpring: 4.5
   springJointDamper: 7
   springJointMassScale: 10
@@ -5817,7 +5821,7 @@ MonoBehaviour:
   enemySpringJointSpring: 100
   enemySpringJointDamper: 1
   enemySpringJointMassScale: 1
-  enemySpringJointMinDistanceMultiplier: 0
+  enemySpringJointMinDistanceMultiplier: 0.1
   enemySpringJointMaxDistanceMultiplier: 0.2
   autoAimSearchRadius: 3
   autoAimMaxDistance: 50
@@ -5925,6 +5929,50 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8021584854266191415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556032608622886531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e85b8febccf5f244815382cb7af7307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lr: {fileID: 9078918660822762467}
+  grapplingGun: {fileID: 1058161332764757661}
+  quality: 500
+  damper: 14
+  strength: 500
+  Velocity: 15
+  waveCount: 8
+  waveHeight: 15
+  affectCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.9185343
+      outSlope: 2.9185343
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.017647607
+    - serializedVersion: 3
+      time: 1
+      value: 0.25
+      inSlope: 0.25
+      outSlope: 0.25
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &9076709280220996665 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 53839564acfeb0049b8c0aef0afc23b5,

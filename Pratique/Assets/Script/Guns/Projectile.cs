@@ -30,9 +30,21 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log($"Projectile collided with {collision.gameObject.name}");
         if (isParried)
         {
             IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                Vector3 hitPoint = collision.contacts[0].point;
+                Vector3 hitDirection = -rb.velocity.normalized;
+                damageable.TakeDamage(damage, hitPoint, hitDirection);
+            }
+        }
+        else
+        {
+            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+            Debug.Log($"Damageable found: {damageable != null}");
             if (damageable != null)
             {
                 Vector3 hitPoint = collision.contacts[0].point;

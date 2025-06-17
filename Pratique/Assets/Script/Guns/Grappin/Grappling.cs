@@ -19,8 +19,9 @@ public class Grappling : MonoBehaviour
     [SerializeField] private PlayerMovement playerMovement;
     private MeleeWeapon meleeWeapon;
 
-    [SerializeField] private Transform gunTip, camera, player;
+    [SerializeField] private Transform camera, player;
     [SerializeField] private Rigidbody playerRb;
+    public Transform gunTip;
 
     [SerializeField] private float maxDistance = 100f;
 
@@ -52,7 +53,7 @@ public class Grappling : MonoBehaviour
     [SerializeField] private float autoAimMaxDistance = 50f;
 
     private SpringJoint springJoint;
-    private bool isGrapplingEnemy = false;
+    public bool isGrapplingEnemy { get; private set; }
     private bool isGrapplingStandard = false;
     private Transform grappledTargetTransform;
 
@@ -128,20 +129,6 @@ public class Grappling : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        if (IsGrappling())
-        {
-            DrawRope();
-        }
-    }
-
-    private void DrawRope()
-    {
-        lr.SetPosition(0, gunTip.position);
-        lr.SetPosition(1, grapplePoint);
-    }
-
     private void StartGrapple()
     {
         wasGrapplingBeforeStop = IsGrappling();
@@ -170,8 +157,6 @@ public class Grappling : MonoBehaviour
                 {
                     bestTarget = hit.transform; 
                 }
-
-                playerRb.useGravity = false;
             }
             else
             {
@@ -190,6 +175,8 @@ public class Grappling : MonoBehaviour
             {
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK);
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_ATTACH);
+
+                playerMovement.enabled = false;
 
                 grapplePoint = bestTarget.position;
                 grappledTargetTransform = bestTarget;
@@ -233,6 +220,13 @@ public class Grappling : MonoBehaviour
     private void StopGrapple()
     {
         hasPreAttacked = false;
+
+        playerMovement.enabled = true;
+
+        //annule toute force apres avoir annuler 
+        playerRb.velocity = Vector3.zero;
+        playerRb.angularVelocity = Vector3.zero;
+
 
         if (IsGrappling() || wasGrapplingBeforeStop)
         {

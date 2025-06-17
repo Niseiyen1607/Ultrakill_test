@@ -1,3 +1,4 @@
+using SmallHedge.SoundManager;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
@@ -18,6 +19,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     [SerializeField] private RobotWalker LeftLeg;
     [SerializeField] private RobotWalker RightLeg;
+
+    public bool isDead = false;
 
     private void Awake()
     {
@@ -51,7 +54,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Die(Vector3 hitPoint, Vector3 hitDirection)
     {
+        if (isDead) return; 
+        isDead = true;
+
         Debug.Log($"{gameObject.name} died!");
+
+        SoundManager.PlaySoundAtPosition(SoundType.ENEMY_DEATH, transform.position);
 
         if (deathEffect != null)
         {
@@ -71,7 +79,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         LeftLeg.enabled = false;
         RightLeg.enabled = false;
 
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 3f);
     }
 
     private void SetRagdollState(bool isRagdoll)

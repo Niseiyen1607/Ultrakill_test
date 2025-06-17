@@ -21,6 +21,11 @@ namespace SmallHedge.SoundManager
         DOOR_CLOSE,
         PICK_UP_ITEM,
         ITEM_CONTACT,
-        HIT,
+        ENEMIES_HIT,
+        BULLET_HIT,
+        PLAYER_HIT,
+        ENEMY_SHOOT,
+        ENEMY_DEATH,
+        RICOCHET,
     }
 }

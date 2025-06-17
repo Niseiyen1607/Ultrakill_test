@@ -41,9 +41,10 @@ public class JumpPad : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // attempt to retrieve the rigid body
-        Rigidbody rb;
-        if (collision.gameObject.TryGetComponent<Rigidbody>(out rb))
+        if (!collision.collider.CompareTag("Player"))
+            return;
+
+        if (collision.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
             Targets[rb] = new JumpPadTarget()
             {

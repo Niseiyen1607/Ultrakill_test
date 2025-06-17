@@ -9,6 +9,7 @@ public class Dashing : MonoBehaviour
     public Transform playerCam;
     private Rigidbody rb;
     private PlayerMovement pm;
+    [SerializeField] private Grappling grappling;
 
     [Header("Dashing")]
     public float dashForce;
@@ -41,6 +42,12 @@ public class Dashing : MonoBehaviour
 
     private void Update()
     {
+        if (grappling.IsGrapplingEnemy())
+        {
+            rb.useGravity = false;
+            return;
+        }
+
         if (Input.GetKeyDown(dashKey))
             Dash();
 

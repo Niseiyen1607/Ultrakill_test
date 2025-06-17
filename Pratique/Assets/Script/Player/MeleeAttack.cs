@@ -79,6 +79,8 @@ public class MeleeWeapon : MonoBehaviour
 
                 damageable.TakeDamage(attackDamage, hitPoint, hitDirection);
 
+                SoundManager.PlaySoundAtPosition(SoundType.ENEMIES_HIT, hitPoint);
+
                 Rigidbody enemyRb = hitCollider.GetComponent<Rigidbody>();
                 if (enemyRb != null)
                 {

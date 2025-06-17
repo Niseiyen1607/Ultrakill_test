@@ -51,6 +51,8 @@ public class ActivateItem : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            SoundManager.PlaySound(SoundType.PICK_UP_ITEM);
+
             switch (itemType)
             {
                 case ItemType.Revolver:
@@ -64,8 +66,6 @@ public class ActivateItem : MonoBehaviour
                     break;
             }
 
-            // Play sound effect
-            SoundManager.PlaySound(SoundType.PICK_UP_ITEM);
             isActivated = true;
             Destroy(gameObject);
         }

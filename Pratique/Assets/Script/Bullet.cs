@@ -1,4 +1,5 @@
 using DG.Tweening;
+using SmallHedge.SoundManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -116,6 +117,8 @@ public class Bullet : MonoBehaviour
             Instantiate(hitEffectPrefab, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
         }
 
+        SoundManager.PlaySoundAtPosition(SoundType.BULLET_HIT, collision.contacts[0].point, 0.3f);
+
         // --- Dégâts et Knockback ---
         float currentDamage = Mathf.Lerp(damage, minDamage, Mathf.Clamp01(timeAlive / damageFalloffTime));
         ApplyDamage(collision.collider, currentDamage, collision.contacts[0].point, rb.velocity.normalized);
@@ -132,7 +135,6 @@ public class Bullet : MonoBehaviour
         {
             if (TryRicochet(collision.transform.position))
             {
-                // Le ricochet a réussi, on augmente les dégâts pour le prochain impact et on continue
                 this.damage *= richochetMultiplier;
                 this.minDamage *= richochetMultiplier;
                 ricochetCount--;
@@ -140,11 +142,9 @@ public class Bullet : MonoBehaviour
             }
         }
 
-        // 2. Gérer le Pierce
         pierceCount--;
         if (pierceCount < 0)
         {
-            // 3. Gérer Sticky ou Destruction
             if (isSticky)
             {
                 rb.isKinematic = true;
@@ -205,19 +205,20 @@ public class Bullet : MonoBehaviour
 
             rb.velocity = direction * rb.velocity.magnitude;
 
-            yield return transform.DOMove(current.nextTarget.position, 0.2f)
+            SoundManager.PlaySoundAtPosition(SoundType.RICOCHET, transform.position);
+
+            yield return transform.DOMove(current.nextTarget.position, 0.1f)
                                           .SetEase(Ease.Linear)
                                           .WaitForCompletion();
 
-            // Nouvelle vérification
-            Collider[] hits = Physics.OverlapSphere(transform.position, 0.2f);
+            Collider[] hits = Physics.OverlapSphere(transform.position, 0.1f);
             foreach (var col in hits)
             {
                 ObjectTriggerOnBullet trigger = col.GetComponent<ObjectTriggerOnBullet>();
                 if (trigger != null)
                 {
                     Debug.Log("Cristal touché via ricochet !");
-                    trigger.Activate(); // Appel direct sans fausse collision
+                    trigger.Activate();
                     break;
                 }
             }
