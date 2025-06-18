@@ -283,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
 
-            if (rb.velocity.y > 0) 
+            if (rb.velocity.y > 0 && !grappling.IsGrapplingEnemy()) 
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 

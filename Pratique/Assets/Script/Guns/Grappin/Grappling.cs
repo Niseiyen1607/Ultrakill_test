@@ -92,6 +92,14 @@ public class Grappling : MonoBehaviour
     {
         if (isGrapplingEnemy && grappledTargetTransform != null)
         {
+            Vector3 toTarget = (grapplePoint - player.position).normalized;
+            Vector3 velocity = playerRb.velocity;
+
+            if (Vector3.Dot(velocity.normalized, toTarget) < 0.5f)
+            {
+                playerRb.velocity = Vector3.zero;
+            }
+
             if (!playedPullSound)
             {
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_PULL);
@@ -101,7 +109,7 @@ public class Grappling : MonoBehaviour
             grapplePoint = grappledTargetTransform.position;
 
             Vector3 directionToGrapplePoint = (grapplePoint - player.position).normalized;
-            playerRb.AddForce(directionToGrapplePoint * enemyGrappleSpeed, ForceMode.Acceleration);
+            playerRb.velocity = directionToGrapplePoint * enemyGrappleSpeed;
 
             float distanceToEnemy = Vector3.Distance(player.position, grapplePoint);
 
@@ -176,8 +184,6 @@ public class Grappling : MonoBehaviour
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK);
                 SoundManager.PlaySound(SoundType.GRAPPLE_HOOK_ATTACH);
 
-                playerMovement.enabled = false;
-
                 grapplePoint = bestTarget.position;
                 grappledTargetTransform = bestTarget;
                 isGrapplingEnemy = true;
@@ -220,13 +226,6 @@ public class Grappling : MonoBehaviour
     private void StopGrapple()
     {
         hasPreAttacked = false;
-
-        playerMovement.enabled = true;
-
-        //annule toute force apres avoir annuler 
-        playerRb.velocity = Vector3.zero;
-        playerRb.angularVelocity = Vector3.zero;
-
 
         if (IsGrappling() || wasGrapplingBeforeStop)
         {

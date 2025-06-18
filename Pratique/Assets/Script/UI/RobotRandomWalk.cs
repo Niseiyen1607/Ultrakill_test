@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class RobotRandomWalk : MonoBehaviour
 {
+    [Header("Movement")]
     public float minMoveSpeed = 0.8f;
     public float maxMoveSpeed = 2f;
     public float directionChangeFrequency = 1.5f;
     public float rotationSmoothness = 2f;
 
     [Header("Obstacle Detection")]
-    public float obstacleDetectionDistance = 1f;
-    public LayerMask obstacleLayerMask; // Assure-toi de définir les bons layers dans l'inspecteur
+    public float obstacleDetectionDistance = 1.5f;
+    public LayerMask obstacleLayer;
 
     private Vector3 targetDirection;
     private float currentSpeed;
-    private bool isAvoidingObstacle = false;
 
     private void Start()
     {
@@ -23,20 +23,15 @@ public class RobotRandomWalk : MonoBehaviour
 
     private void Update()
     {
+        // Check for obstacle directly ahead
         if (IsObstacleAhead())
         {
-            // Stop and pick new direction if obstacle ahead
-            if (!isAvoidingObstacle)
-            {
-                StartCoroutine(AvoidObstacleRoutine());
-            }
-            return; // ne bouge pas tant que nouvelle direction pas choisie
+            PickNewDirection(); // force change direction
         }
 
-        // Smooth movement
+        // Move and rotate smoothly
         transform.position += targetDirection * currentSpeed * Time.deltaTime;
 
-        // Smooth rotation
         if (targetDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
@@ -44,56 +39,55 @@ public class RobotRandomWalk : MonoBehaviour
         }
     }
 
+    private bool IsObstacleAhead()
+    {
+        // Cast a ray forward from the center of the robot
+        Vector3 origin = transform.position + Vector3.up * 0.5f; // slightly elevated to avoid ground hits
+        return Physics.Raycast(origin, transform.forward, obstacleDetectionDistance, obstacleLayer);
+    }
+
+    private void PickNewDirection()
+    {
+        // Force a new direction away from obstacle
+        float angle = Random.Range(90f, 270f); // turn ~back or to side
+        targetDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
+        targetDirection = targetDirection.normalized;
+    }
+
     IEnumerator RandomizeMovement()
     {
         while (true)
         {
-            ChooseRandomDirection();
-
-            // Random speed
-            currentSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
-
-            // Petite pause ?
-            if (Random.value < 0.2f)
+            // Only pick new direction if not currently dodging obstacle
+            if (!IsObstacleAhead())
             {
-                currentSpeed = 0f;
-                yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
+                float angle = Random.Range(0f, 360f);
+                targetDirection = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)).normalized;
+                currentSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
+
+                if (Random.value < 0.2f)
+                {
+                    currentSpeed = 0f;
+                    yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
+                }
             }
 
             yield return new WaitForSeconds(Random.Range(directionChangeFrequency * 0.8f, directionChangeFrequency * 1.5f));
         }
     }
 
-    void ChooseRandomDirection()
-    {
-        float angle = Random.Range(0f, 360f);
-        targetDirection = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)).normalized;
-    }
-
-    bool IsObstacleAhead()
-    {
-        return Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, obstacleDetectionDistance, obstacleLayerMask);
-    }
-
-    IEnumerator AvoidObstacleRoutine()
-    {
-        isAvoidingObstacle = true;
-        yield return null;
-
-        // Pick a new direction that is not facing an obstacle
-        for (int i = 0; i < 10; i++)
-        {
-            ChooseRandomDirection();
-            if (!IsObstacleAhead()) break;
-        }
-
-        isAvoidingObstacle = false;
-    }
     private void OnDrawGizmos()
     {
+        // Draw the obstacle detection ray
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * obstacleDetectionDistance);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 0.5f, obstacleDetectionDistance);
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        Gizmos.DrawRay(origin, transform.forward * obstacleDetectionDistance);
+
+        // Draw the target direction
+        if (targetDirection != Vector3.zero)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + targetDirection * 0.5f);
+        }
     }
 }

@@ -27,5 +27,6 @@ namespace SmallHedge.SoundManager
         ENEMY_SHOOT,
         ENEMY_DEATH,
         RICOCHET,
+        ENEMY_STEP,
     }
 }

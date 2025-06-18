@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using SmallHedge.SoundManager;
 
 public class RobotWalker : MonoBehaviour
 {

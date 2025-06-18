@@ -29,17 +29,22 @@ namespace SmallHedge.SoundManager
             AudioClip[] clips = soundList.sounds;
             AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
-            if(source)
+            float pitch = soundList.randomizePitch ? UnityEngine.Random.Range(0.7f, 1.1f) : 1f;
+
+            if (source)
             {
                 source.outputAudioMixerGroup = soundList.mixer;
                 source.clip = randomClip;
                 source.volume = volume * soundList.volume;
+                source.pitch = pitch;
                 source.Play();
             }
             else
             {
                 instance.audioSource.outputAudioMixerGroup = soundList.mixer;
+                instance.audioSource.pitch = pitch;
                 instance.audioSource.PlayOneShot(randomClip, volume * soundList.volume);
+                instance.audioSource.pitch = 1f; // Reset to default
             }
         }
 
@@ -49,6 +54,8 @@ namespace SmallHedge.SoundManager
             AudioClip[] clips = soundList.sounds;
             AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
+            float pitch = soundList.randomizePitch ? UnityEngine.Random.Range(0.7f, 1.1f) : 1f;
+
             GameObject tempGO = new GameObject("TempAudio");
             tempGO.transform.position = position;
 
@@ -56,14 +63,15 @@ namespace SmallHedge.SoundManager
             aSource.outputAudioMixerGroup = soundList.mixer;
             aSource.clip = randomClip;
             aSource.volume = volume * soundList.volume;
+            aSource.pitch = pitch;
 
-            aSource.spatialBlend = 1f; 
-            aSource.minDistance = minDistance; 
+            aSource.spatialBlend = 1f;
+            aSource.minDistance = minDistance;
             aSource.maxDistance = maxDistance;
-            aSource.rolloffMode = AudioRolloffMode.Linear; 
+            aSource.rolloffMode = AudioRolloffMode.Linear;
 
             aSource.Play();
-            Destroy(tempGO, randomClip.length);
+            Destroy(tempGO, randomClip.length / pitch); // Ajusté pour pitch
         }
     }
 
@@ -75,5 +83,6 @@ namespace SmallHedge.SoundManager
         [Range(0, 1)] public float volume;
         public AudioMixerGroup mixer;
         public AudioClip[] sounds;
+        public bool randomizePitch;
     }
 }

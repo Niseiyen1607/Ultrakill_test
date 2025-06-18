@@ -23,20 +23,24 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 281eade3a0bc2094aba0ce04eb7b98df, type: 3}
     - {fileID: 8300000, guid: d374e73e96ebd9943be3d325f46e5b7a, type: 3}
     - {fileID: 8300000, guid: f8ae4c9656a3a424aabe1cc6b987a383, type: 3}
+    randomizePitch: 1
   - name: JUMP
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
       type: 2}
     sounds:
     - {fileID: 8300000, guid: 191238cfb51048540958313034ae315a, type: 3}
+    randomizePitch: 0
   - name: DASH
     volume: 1
     mixer: {fileID: 0}
     sounds: []
+    randomizePitch: 0
   - name: WALL_RUN
     volume: 1
     mixer: {fileID: 0}
     sounds: []
+    randomizePitch: 0
   - name: SLIDE
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
@@ -45,6 +49,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 5029d3b4645c065438f6d112b716c624, type: 3}
     - {fileID: 8300000, guid: d2567acd93480b34b9645111388012a6, type: 3}
     - {fileID: 8300000, guid: 4007692149232b740b217be6fc85011e, type: 3}
+    randomizePitch: 0
   - name: KATANA_ATTACK
     volume: 1
     mixer: {fileID: -152615870819846742, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
@@ -52,45 +57,54 @@ MonoBehaviour:
     - {fileID: 8300000, guid: a5084a127e16f1c45a3265d64d460512, type: 3}
     - {fileID: 8300000, guid: 9326f11b528cf104e933c0eecb0ed4f1, type: 3}
     - {fileID: 8300000, guid: 59255a5c27df2e145b786dbfd518363a, type: 3}
+    randomizePitch: 0
   - name: GRAPPLE_HOOK
     volume: 1
     mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: aef8bce46aef0984fa03492755f9428e, type: 3}
+    randomizePitch: 0
   - name: GRAPPLE_HOOK_ATTACH
     volume: 1
     mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: 76b72b34ac793fd4681be1c4ba6544a1, type: 3}
+    randomizePitch: 0
   - name: GRAPPLE_HOOK_RELEASE
     volume: 1
     mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: ab38396880fa1b3458bc85469536eb0c, type: 3}
+    randomizePitch: 0
   - name: GRAPPLE_HOOK_PULL
     volume: 1
     mixer: {fileID: 7223769801778341586, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: b56cffcad601e2d42b34ad374e8458c1, type: 3}
+    randomizePitch: 0
   - name: GLASSE_BREAK
     volume: 1
     mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: f967f7b0d05cbb7419d9d539d522f806, type: 3}
+    randomizePitch: 0
   - name: DOOR_OPEN
     volume: 1
     mixer: {fileID: 0}
     sounds: []
+    randomizePitch: 0
   - name: DOOR_CLOSE
     volume: 1
     mixer: {fileID: 0}
     sounds: []
+    randomizePitch: 0
   - name: PICK_UP_ITEM
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
       type: 2}
     sounds:
     - {fileID: 8300000, guid: d78a3438b6a600148ad466ed039fcc8b, type: 3}
+    randomizePitch: 0
   - name: ITEM_CONTACT
     volume: 1
     mixer: {fileID: 7750675788828403545, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
@@ -100,33 +114,39 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 111130291e3982c43b4366dae0f6666a, type: 3}
     - {fileID: 8300000, guid: 07b3128b0a2ea3e4e993ea79dfaf999f, type: 3}
     - {fileID: 8300000, guid: 38142406b64a69544a89cc17010d97a1, type: 3}
+    randomizePitch: 0
   - name: ENEMIES_HIT
     volume: 1
     mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: cbe049a08eeba884480c6b11c864dec7, type: 3}
+    randomizePitch: 0
   - name: BULLET_HIT
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
       type: 2}
     sounds:
     - {fileID: 8300000, guid: 7d318467bc433eb429785a4d3b9246b2, type: 3}
+    randomizePitch: 0
   - name: PLAYER_HIT
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
       type: 2}
     sounds:
     - {fileID: 8300000, guid: 76ac454819a914a4696a549d375d0d68, type: 3}
+    randomizePitch: 0
   - name: ENEMY_SHOOT
     volume: 1
     mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: 00464ccbe19b20d489246b1d2413b320, type: 3}
+    randomizePitch: 0
   - name: ENEMY_DEATH
     volume: 1
     mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
     sounds:
     - {fileID: 8300000, guid: 46d21e9a35b3ab04489ead20cd5d4143, type: 3}
+    randomizePitch: 0
   - name: RICOCHET
     volume: 1
     mixer: {fileID: -5180383461243039982, guid: 4d5ef7dcad79e7448adb0828a6f91899,
@@ -136,3 +156,10 @@ MonoBehaviour:
     - {fileID: 8300000, guid: ef76db200dd8c2a4190a90f3c5fd416d, type: 3}
     - {fileID: 8300000, guid: 9f8dbb5d973966e4d9bd4b3b67ad81c7, type: 3}
     - {fileID: 8300000, guid: 62fffdf53864f7646ae3bf6df2256c86, type: 3}
+    randomizePitch: 0
+  - name: ENEMY_STEP
+    volume: 1
+    mixer: {fileID: 4976133345808468136, guid: 4d5ef7dcad79e7448adb0828a6f91899, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 9d53699f85226e749bdd78da42caa3b8, type: 3}
+    randomizePitch: 1

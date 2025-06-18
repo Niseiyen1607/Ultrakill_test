@@ -65,4 +65,19 @@ public class EnemyShooter : MonoBehaviour
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb) rb.velocity = dirToShoot * projectile.speed;
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (shootPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(shootPoint.position, attackRange);
+            Gizmos.DrawLine(shootPoint.position, shootPoint.position + shootPoint.forward * attackRange);
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
+    }
 }

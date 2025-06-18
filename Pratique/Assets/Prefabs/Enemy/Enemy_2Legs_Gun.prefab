@@ -602,7 +602,7 @@ MonoBehaviour:
   deathEffect: {fileID: 419028545046712320, guid: cc480a9fb265e0f468524f3408ef5956,
     type: 3}
   pushForce: 1
-  upwardForceAmount: 1
+  upwardForceAmount: 5
   ragdollBodies: []
   ragdollColliders: []
   mainCollider: {fileID: 7062874860335072757}

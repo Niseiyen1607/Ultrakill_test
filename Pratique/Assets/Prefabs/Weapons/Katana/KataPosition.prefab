@@ -5774,7 +5774,6 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
-  enemyKnockbackForce: 5
   hitParticlesPrefab: {fileID: 5834493549538774107, guid: 5fc21b48c997d9a478db676aa7992529,
     type: 3}
 --- !u!114 &1058161332764757661
@@ -5819,10 +5818,10 @@ MonoBehaviour:
   springJointMinDistanceMultiplier: 0.25
   springJointMaxDistanceMultiplier: 0.5
   enemySpringJointSpring: 100
-  enemySpringJointDamper: 10
+  enemySpringJointDamper: 100
   enemySpringJointMassScale: 1
   enemySpringJointMinDistanceMultiplier: 0.1
-  enemySpringJointMaxDistanceMultiplier: 0.2
+  enemySpringJointMaxDistanceMultiplier: 0.5
   autoAimSearchRadius: 3
   autoAimMaxDistance: 50
 --- !u!120 &9078918660822762467
