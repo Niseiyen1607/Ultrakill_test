@@ -26,7 +26,7 @@ public class RobotRandomWalk : MonoBehaviour
         // Check for obstacle directly ahead
         if (IsObstacleAhead())
         {
-            PickNewDirection(); // force change direction
+            PickNewDirection(); 
         }
 
         // Move and rotate smoothly
@@ -41,15 +41,13 @@ public class RobotRandomWalk : MonoBehaviour
 
     private bool IsObstacleAhead()
     {
-        // Cast a ray forward from the center of the robot
         Vector3 origin = transform.position + Vector3.up * 0.5f; // slightly elevated to avoid ground hits
         return Physics.Raycast(origin, transform.forward, obstacleDetectionDistance, obstacleLayer);
     }
 
     private void PickNewDirection()
     {
-        // Force a new direction away from obstacle
-        float angle = Random.Range(90f, 270f); // turn ~back or to side
+        float angle = Random.Range(90f, 270f); 
         targetDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
         targetDirection = targetDirection.normalized;
     }
@@ -58,7 +56,6 @@ public class RobotRandomWalk : MonoBehaviour
     {
         while (true)
         {
-            // Only pick new direction if not currently dodging obstacle
             if (!IsObstacleAhead())
             {
                 float angle = Random.Range(0f, 360f);
@@ -78,12 +75,10 @@ public class RobotRandomWalk : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw the obstacle detection ray
         Gizmos.color = Color.red;
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         Gizmos.DrawRay(origin, transform.forward * obstacleDetectionDistance);
 
-        // Draw the target direction
         if (targetDirection != Vector3.zero)
         {
             Gizmos.color = Color.green;

@@ -1,139 +1,131 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GunManager : MonoBehaviour
 {
     public Gun currentGun;
+
     [SerializeField] private GameObject shotgun;
     [SerializeField] private GameObject revolver;
     [SerializeField] private GameObject katana;
 
-    void Update()
-    {
-        if (currentGun == null) return;
+    private Dictionary<string, GameObject> allWeapons;
+    private List<string> unlockedWeapons = new();
+    private int currentWeaponIndex = 0;
 
-        if (currentGun.Automatic)
+    private void Start()
+    {
+        allWeapons = new Dictionary<string, GameObject>
         {
-            if (Input.GetMouseButton(0))
+            { "Shotgun", shotgun },
+            { "Revolver", revolver },
+            { "Katana", katana }
+        };
+
+        DeactivateAllGuns();
+    }
+
+    private void Update()
+    {
+        if (currentGun != null)
+        {
+            if (currentGun.Automatic)
             {
-                Debug.Log("Automatic fire mode active");
-                currentGun.TryShoot();
+                if (Input.GetMouseButton(0))
+                    currentGun.TryShoot();
             }
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
+            else
             {
-                currentGun.TryShoot();
+                if (Input.GetMouseButtonDown(0))
+                    currentGun.TryShoot();
             }
+
+            if (Input.GetKeyDown(KeyCode.R))
+                currentGun.Reload();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("Reloading gun");
-            currentGun.Reload();
-        }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchToWeaponIndex(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchToWeaponIndex(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchToWeaponIndex(2);
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll > 0f) SwitchToNextWeapon();
+        else if (scroll < 0f) SwitchToPreviousWeapon();
     }
 
-    public void ActivateKatana()
+    public void ActivateWeapon(string weaponName)
     {
-        if (katana != null)
+        if (!allWeapons.ContainsKey(weaponName)) return;
+
+        if (!unlockedWeapons.Contains(weaponName))
         {
-            katana.SetActive(true);
-            Debug.Log("Katana activated");
+            unlockedWeapons.Add(weaponName);
+            Debug.Log(weaponName + " unlocked.");
         }
-        else
-        {
-            Debug.LogWarning("Katana GameObject is not assigned.");
-        }
+
+        SwitchToWeapon(weaponName);
     }
 
-    public void ActivateShotgun()
+    private void SwitchToWeapon(string weaponName)
     {
-        if (shotgun != null)
-        {
-            shotgun.SetActive(true);
-            currentGun = shotgun.GetComponent<Gun>();
-            Debug.Log("Shotgun activated");
-        }
-        else
-        {
-            Debug.LogWarning("Shotgun GameObject is not assigned.");
-        }
+        if (!unlockedWeapons.Contains(weaponName)) return;
+
+        DeactivateAllGuns();
+
+        GameObject weapon = allWeapons[weaponName];
+        weapon.SetActive(true);
+        currentGun = weapon.GetComponent<Gun>();
+        currentWeaponIndex = unlockedWeapons.IndexOf(weaponName);
+
+        Debug.Log(weaponName + " equipped.");
     }
 
-    public void ActivateRevolver()
+    private void SwitchToWeaponIndex(int index)
     {
-        if (revolver != null)
-        {
-            revolver.SetActive(true);
-            currentGun = revolver.GetComponent<Gun>();
-            Debug.Log("Revolver activated");
-        }
-        else
-        {
-            Debug.LogWarning("Revolver GameObject is not assigned.");
-        }
+        if (index < 0 || index >= unlockedWeapons.Count) return;
+        SwitchToWeapon(unlockedWeapons[index]);
+    }
+
+    private void SwitchToNextWeapon()
+    {
+        if (unlockedWeapons.Count <= 1) return;
+        currentWeaponIndex = (currentWeaponIndex + 1) % unlockedWeapons.Count;
+        SwitchToWeapon(unlockedWeapons[currentWeaponIndex]);
+    }
+
+    private void SwitchToPreviousWeapon()
+    {
+        if (unlockedWeapons.Count <= 1) return;
+        currentWeaponIndex = (currentWeaponIndex - 1 + unlockedWeapons.Count) % unlockedWeapons.Count;
+        SwitchToWeapon(unlockedWeapons[currentWeaponIndex]);
     }
 
     public void DeactivateAllGuns()
     {
-        if (shotgun != null) shotgun.SetActive(false);
-        if (revolver != null) revolver.SetActive(false);
-        if (katana != null) katana.SetActive(false);
+        foreach (var weapon in allWeapons.Values)
+            weapon?.SetActive(false);
+
         currentGun = null;
-        Debug.Log("All guns deactivated");
     }
 
-    public void DeactivateShotgun()
+    public void DeactivateWeapon(string weaponName)
     {
-        if (shotgun != null)
+        if (allWeapons.TryGetValue(weaponName, out GameObject weapon))
         {
-            shotgun.SetActive(false);
-            if (currentGun == shotgun.GetComponent<Gun>())
-            {
+            weapon.SetActive(false);
+            if (currentGun == weapon.GetComponent<Gun>())
                 currentGun = null;
-            }
-            Debug.Log("Shotgun deactivated");
-        }
-        else
-        {
-            Debug.LogWarning("Shotgun GameObject is not assigned.");
+
+            unlockedWeapons.Remove(weaponName);
+            Debug.Log(weaponName + " deactivated.");
         }
     }
 
-    public void DeactivateRevolver()
-    {
-        if (revolver != null)
-        {
-            revolver.SetActive(false);
-            if (currentGun == revolver.GetComponent<Gun>())
-            {
-                currentGun = null;
-            }
-            Debug.Log("Revolver deactivated");
-        }
-        else
-        {
-            Debug.LogWarning("Revolver GameObject is not assigned.");
-        }
-    }
+    public void ActivateRevolver() => ActivateWeapon("Revolver");
+    public void ActivateShotgun() => ActivateWeapon("Shotgun");
+    public void ActivateKatana() => ActivateWeapon("Katana");
 
-    public void DeactivateKatana()
-    {
-        if (katana != null)
-        {
-            katana.SetActive(false);
-            if (currentGun == katana.GetComponent<Gun>())
-            {
-                currentGun = null;
-            }
-            Debug.Log("Katana deactivated");
-        }
-        else
-        {
-            Debug.LogWarning("Katana GameObject is not assigned.");
-        }
-    }
+    public void DeactivateRevolver() => DeactivateWeapon("Revolver");
+    public void DeactivateShotgun() => DeactivateWeapon("Shotgun");
+    public void DeactivateKatana() => DeactivateWeapon("Katana");
 }
