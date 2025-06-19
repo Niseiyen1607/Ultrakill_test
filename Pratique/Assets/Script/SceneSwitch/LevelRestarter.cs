@@ -70,7 +70,6 @@ public class LevelRestarter : MonoBehaviour
         }
     }
 
-    // Call this if you're doing a *true* level change to a *different* level
     public static void ClearInstance()
     {
         if (Instance != null)
