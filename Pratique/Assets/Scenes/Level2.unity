@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571322, b: 0.30692163, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -268,7 +268,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  - {fileID: 2100000, guid: 654be4c67e5d4654984018bebf30de0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1445,7 +1445,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
+  - {fileID: 2100000, guid: c9330f6f01db19d4cbc915adb0253625, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5373,7 +5373,7 @@ PrefabInstance:
         type: 3}
       propertyPath: doorTransform
       value: 
-      objectReference: {fileID: 482856060}
+      objectReference: {fileID: 0}
     - target: {fileID: 925118398485174939, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a,
         type: 3}
       propertyPath: closedOffset.y
@@ -6598,12 +6598,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 482856062}
   m_SourcePrefab: {fileID: 100100000, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a, type: 3}
---- !u!4 &482856060 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7769974228849234617, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a,
-    type: 3}
-  m_PrefabInstance: {fileID: 482856059}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &482856061 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7688162202720470184, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a,
@@ -7445,7 +7439,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  - {fileID: 2100000, guid: 654be4c67e5d4654984018bebf30de0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8655,7 +8649,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  - {fileID: 2100000, guid: 654be4c67e5d4654984018bebf30de0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9031,9 +9025,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153af3f7cd1efc1409b368bf6bdb32ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGun: {fileID: 1565821429}
+  currentGun: {fileID: 0}
   shotgun: {fileID: 1396702166}
-  revolver: {fileID: 1565821426}
+  revolver: {fileID: 0}
   katana: {fileID: 589899958}
 --- !u!1 &1001856444
 GameObject:
@@ -12567,6 +12561,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7107d9153b7a48e4f8ec22618210940e, type: 3}
+--- !u!4 &1513852919 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1923070836552903373, guid: 7107d9153b7a48e4f8ec22618210940e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1513852918}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1546226241
 GameObject:
   m_ObjectHideFlags: 0
@@ -12596,33 +12596,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1565821427}
+  - {fileID: 1513852919}
   m_Father: {fileID: 951557413}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1565821426 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5969677101261493721, guid: 7107d9153b7a48e4f8ec22618210940e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1513852918}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1565821427 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8273307503131760098, guid: 7107d9153b7a48e4f8ec22618210940e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1513852918}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1565821429 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1125238420262763798, guid: 7107d9153b7a48e4f8ec22618210940e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1513852918}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565821426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e23673ab9631748915dd1f9cac8da5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1600741558
 Mesh:
   m_ObjectHideFlags: 0
@@ -12810,7 +12786,7 @@ PrefabInstance:
         type: 3}
       propertyPath: doorTransform
       value: 
-      objectReference: {fileID: 1606672068}
+      objectReference: {fileID: 0}
     - target: {fileID: 925118398485174939, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a,
         type: 3}
       propertyPath: closedOffset.y
@@ -13806,12 +13782,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1606672066}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1606672068 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7769974228849234617, guid: 9b5f98ff4b2630d40b5c4040b7e33f5a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1606672066}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1606672069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13824,7 +13794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad73461695c6656498905a2fc7435532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToMove: {fileID: 1606672068}
+  objectToMove: {fileID: 0}
   moveOffset: {x: 0, y: 3, z: 0}
   moveDuration: 3
   easing: 27
@@ -15672,8 +15642,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
-  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  - {fileID: 2100000, guid: c9330f6f01db19d4cbc915adb0253625, type: 2}
+  - {fileID: 2100000, guid: 654be4c67e5d4654984018bebf30de0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20669,8 +20639,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
-  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  - {fileID: 2100000, guid: c9330f6f01db19d4cbc915adb0253625, type: 2}
+  - {fileID: 2100000, guid: 654be4c67e5d4654984018bebf30de0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

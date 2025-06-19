@@ -61,6 +61,9 @@ public class GunManager : MonoBehaviour
         {
             unlockedWeapons.Add(weaponName);
             Debug.Log(weaponName + " unlocked.");
+
+            UIManager.Instance.UpdateWeaponUI(unlockedWeapons, weaponName);
+
         }
 
         SwitchToWeapon(weaponName);
@@ -76,6 +79,8 @@ public class GunManager : MonoBehaviour
         weapon.SetActive(true);
         currentGun = weapon.GetComponent<Gun>();
         currentWeaponIndex = unlockedWeapons.IndexOf(weaponName);
+
+        UIManager.Instance.UpdateWeaponUI(unlockedWeapons, weaponName);
 
         Debug.Log(weaponName + " equipped.");
     }
@@ -106,6 +111,8 @@ public class GunManager : MonoBehaviour
             weapon?.SetActive(false);
 
         currentGun = null;
+
+        UIManager.Instance.UpdateWeaponUI(unlockedWeapons, "");
     }
 
     public void DeactivateWeapon(string weaponName)
@@ -118,6 +125,8 @@ public class GunManager : MonoBehaviour
 
             unlockedWeapons.Remove(weaponName);
             Debug.Log(weaponName + " deactivated.");
+
+            UIManager.Instance.UpdateWeaponUI(unlockedWeapons, currentGun != null ? currentGun.name : "");
         }
     }
 
